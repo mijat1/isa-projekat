@@ -1,14 +1,19 @@
 package serverapp.isaBack.model;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -42,6 +47,11 @@ public class Unit {
     
     private int percentOfCancel;
 
+	@ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "tags",
+            joinColumns = @JoinColumn(name = "unit_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
+    private List<OtherTag> services;
 
 
 	public Unit() {
@@ -148,6 +158,16 @@ public class Unit {
 
 	public void setPercentOfCancel(int percentOfCancel) {
 		this.percentOfCancel = percentOfCancel;
+		
+		
+	}
+
+	public List<OtherTag> getServices() {
+		return services;
+	}
+
+	public void setServices(List<OtherTag> services) {
+		this.services = services;
 	}
 
 }

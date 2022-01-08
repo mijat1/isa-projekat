@@ -3,14 +3,21 @@
 ***************HEADER**************************************
  */
 
- ::selection {
-  color: red;
-  background: yellow;
-}
+
 
 select option[selected]{
   background-color: red  !important;
 }
+
+a {
+  color: rgb(146, 40, 40) ;
+}
+
+a:hover {
+  color: rgb(146, 40, 40) ;
+  text-decoration: none;
+}
+
 
 .btn-primary,
 .btn-primary:active,
@@ -27,6 +34,23 @@ select option[selected]{
   color: #fff !important;
 }
 
+
+
+
+.btn-outline-primary,
+.btn-outline-primary:active,
+.btn-outline-primary:visited
+.btn-outline-primary:focus  {
+  border-color:rgb(146, 40, 40)  !important;
+
+  color: rgb(146, 40, 40)  !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: rgb(204, 84, 84) !important;
+  border-color:rgb(146, 40, 40)  !important;
+  color: #fff !important;
+}
  #header {
   background: rgb(146, 40, 40);
   transition: all 0.5s;

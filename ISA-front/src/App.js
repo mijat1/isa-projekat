@@ -4,6 +4,8 @@ import HomePage from "./Pages/HomePage"
 import LoginPage from "./Pages/LoginPage"
 import RegistrationPage from "./Pages/RegistrationPage"
 import ActivationPage from "./Pages/ActivationPage"
+import BoatsPage from './Pages/Boats/BoatsPage';
+import CottagesPage from './Pages/Cottages/CottagesPage';
 import {
   BrowserRouter as Router,
   Route,
@@ -26,7 +28,9 @@ function App() {
         <Route exact to ="/"  path ="/" component={HomePage}/>
         <Route  to ="/login" path ="/login"  component={LoginPage}/>
         <Route  to ="/registration" path ="/registration"  component={RegistrationPage}/>
-        <Route to="/activeAccount/:id" path ="/activeAccount/:id"  component={ActivationPage}/>
+        <Route to="/activeAccount/:id" path ="/activeAccount/:id"  component={ActivationPage}/>c
+        <Route  to ="/boats" path ="/boats"  component={BoatsPage}/>
+        <Route  to ="/cottages" path ="/cottages"  component={CottagesPage}/>
         </Switch>
     </Router>
      

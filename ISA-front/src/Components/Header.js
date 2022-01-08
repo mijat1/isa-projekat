@@ -64,7 +64,13 @@ class Header extends React.Component{
                 <ReactBootStrap.Navbar.Collapse  id="responsive-navbar-nav">
               
                 <ReactBootStrap.Nav className="ml-auto" >
-            
+                <Link to="/boats">
+                <ReactBootStrap.Nav.Link href="#deets" >Brodovi</ReactBootStrap.Nav.Link>
+                </Link>
+
+                <Link to="/cottages">
+                <ReactBootStrap.Nav.Link href="#deets" >Vikendice</ReactBootStrap.Nav.Link>
+                </Link>
                
                   
                 <ReactBootStrap.NavDropdown alignRight title="Korisnik" id="collasible-nav-dropdown">
