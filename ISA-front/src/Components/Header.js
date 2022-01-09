@@ -77,7 +77,7 @@ class Header extends React.Component{
                     <ReactBootStrap.NavDropdown.Item href="/login" hidden={this.IsLogedIn()}>Prijava</ReactBootStrap.NavDropdown.Item>
                     <ReactBootStrap.NavDropdown.Divider hidden={this.IsLogedIn()} />
                     <ReactBootStrap.NavDropdown.Item href="/registration" hidden={this.IsLogedIn()}>Registracija</ReactBootStrap.NavDropdown.Item>
-
+                    <ReactBootStrap.NavDropdown.Item  href="/userProfile" hidden={!this.IsLogedIn("*")}>Moj profil</ReactBootStrap.NavDropdown.Item>
                     <ReactBootStrap.NavDropdown.Divider hidden={!this.IsLogedIn()} />
                     <ReactBootStrap.NavDropdown.Item onClick={this.handleLogout} href="/login" hidden={!this.IsLogedIn("*")}>Izloguj se</ReactBootStrap.NavDropdown.Item>
                 </ReactBootStrap.NavDropdown>

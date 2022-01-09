@@ -64,7 +64,7 @@ insert into images(id,file_name) values ('2675dc4a-4c6c-11ec-81d3-0242ac130003',
 
 --album_images
 insert into album_images(album_id, images_id) values ('581dc9d4-4c66-11ec-81d3-0242ac130003','71e28e12-4c67-11ec-81d3-0242ac130003');
-insert into album_images(album_id, images_id) values ('0756466a-4c6c-11ec-81d3-0242ac130003','1ea0cfca-4c6c-11ec-81d3-0242ac130003');
+--insert into album_images(album_id, images_id) values ('0756466a-4c6c-11ec-81d3-0242ac130003','1ea0cfca-4c6c-11ec-81d3-0242ac130003');
 
 --units
 insert into unit(id, name, address, description, rules, album_id, price, cancellation, percent_of_cancel) values ('4ee275b4-4c65-11ec-81d3-0242ac130003', 'Brod Marina','Petra Drapsina 13','Bord je opremljen savremenom opremom i omogcava vam komforno visesatno putovanje', 'Trcanje skakanje i sve ostalo je dozvoljeno','581dc9d4-4c66-11ec-81d3-0242ac130003','1520', 'FREE','0');

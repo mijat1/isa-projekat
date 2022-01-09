@@ -6,6 +6,7 @@ import RegistrationPage from "./Pages/RegistrationPage"
 import ActivationPage from "./Pages/ActivationPage"
 import BoatsPage from './Pages/Boats/BoatsPage';
 import CottagesPage from './Pages/Cottages/CottagesPage';
+import UserProfilePage from "./Pages/UserProfile";
 import {
   BrowserRouter as Router,
   Route,
@@ -31,6 +32,7 @@ function App() {
         <Route to="/activeAccount/:id" path ="/activeAccount/:id"  component={ActivationPage}/>c
         <Route  to ="/boats" path ="/boats"  component={BoatsPage}/>
         <Route  to ="/cottages" path ="/cottages"  component={CottagesPage}/>
+        <Route  to ="/userProfile" path ="/userProfile"  component={UserProfilePage}/>
         </Switch>
     </Router>
      

@@ -42,7 +42,7 @@ class BoatsPage extends Component {
 	};
 
 	componentDidMount() {
-	
+		console.log(localStorage.getItem("keyRole"));
 		Axios.get(API_URL + "/boat/allBoats")
 
 			.then((res) => {
