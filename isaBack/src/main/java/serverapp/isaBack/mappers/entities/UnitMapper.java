@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 
 import serverapp.isaBack.DTO.entities.BoatDTO;
 import serverapp.isaBack.DTO.entities.CottageDTO;
+import serverapp.isaBack.DTO.entities.CourseDTO;
 import serverapp.isaBack.DTO.entities.OtherTagDTO;
 import serverapp.isaBack.model.Boat;
 import serverapp.isaBack.model.Cottage;
+import serverapp.isaBack.model.FishingCourse;
 import serverapp.isaBack.model.OtherTag;
 import serverapp.isaBack.unspecifiedDTO.UnspecifiedDTO;
 
@@ -60,6 +62,28 @@ public class UnitMapper {
 		return new UnspecifiedDTO<CottageDTO> (cottage.getId(), new CottageDTO( cottage.getName(), cottage.getAddress(),
 				cottage.getDescription(),imageBytes,tags,avgGrade));
 	}
+	
+	
+	public UnspecifiedDTO<CourseDTO> MapCourseToCourseDTO(FishingCourse course,double avgGrade) throws IOException{
+		if(course == null) 
+			throw new IllegalArgumentException();
+		String basePath = new File("").getAbsolutePath();
+		System.out.println("putanjaaaa "+basePath);
+		byte[] imageBytes=null;
+		if(!course.getAlbum().getImages().isEmpty()) {
+			System.out.println("slikaaa "+ course.getAlbum().getImages().get(0).getFileName());
+			imageBytes = extractBytes(basePath+"\\src\\main\\java\\serverapp\\isaBack\\images\\" + course.getAlbum().getImages().get(0).getFileName());
+		}else {
+			imageBytes = extractBytes(basePath+"\\src\\main\\java\\serverapp\\isaBack\\images\\nemaslike.png");
+		}
+			List<UnspecifiedDTO<OtherTagDTO>> tags= MapTagToTagDTO(course.getServices());
+ 		tags.add(new UnspecifiedDTO<OtherTagDTO>(UUID.randomUUID(),new OtherTagDTO("osnovna cena",course.getPrice())));
+		
+		return new UnspecifiedDTO<CourseDTO> (course.getId(), new CourseDTO( course.getName(), course.getAddress(),
+				course.getDescription(),imageBytes,tags,avgGrade,course.getInstructor().toString(),course.getBiography()));
+	}
+	
+	
 	
 	public  List<UnspecifiedDTO<OtherTagDTO>> MapTagToTagDTO(List<OtherTag> tags){
 		List<UnspecifiedDTO<OtherTagDTO>> retVal = new ArrayList<UnspecifiedDTO<OtherTagDTO>>();

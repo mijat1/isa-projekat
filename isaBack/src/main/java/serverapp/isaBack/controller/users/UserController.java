@@ -26,7 +26,7 @@ import serverapp.isaBack.unspecifiedDTO.UnspecifiedDTO;
 
 @RestController
 @RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
-public class UserContoller {
+public class UserController {
 	
 	@Autowired
 	private UserService userService;
@@ -39,9 +39,9 @@ public class UserContoller {
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	public ResponseEntity<UnspecifiedDTO<ClientDTO>> getLogedClient(HttpServletRequest request) {
 		try {
-			UnspecifiedDTO<ClientDTO> phAdmin = userService.getLoggedClient();
+			UnspecifiedDTO<ClientDTO> client = userService.getLoggedClient();
 			
-			return new ResponseEntity<>(phAdmin,HttpStatus.OK);  
+			return new ResponseEntity<>(client,HttpStatus.OK);  
 		} catch (EntityNotFoundException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
 		} 

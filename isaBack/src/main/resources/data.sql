@@ -64,7 +64,7 @@ insert into images(id,file_name) values ('2675dc4a-4c6c-11ec-81d3-0242ac130003',
 
 --album_images
 insert into album_images(album_id, images_id) values ('581dc9d4-4c66-11ec-81d3-0242ac130003','71e28e12-4c67-11ec-81d3-0242ac130003');
---insert into album_images(album_id, images_id) values ('0756466a-4c6c-11ec-81d3-0242ac130003','1ea0cfca-4c6c-11ec-81d3-0242ac130003');
+insert into album_images(album_id, images_id) values ('0756466a-4c6c-11ec-81d3-0242ac130003','1ea0cfca-4c6c-11ec-81d3-0242ac130003');
 
 --units
 insert into unit(id, name, address, description, rules, album_id, price, cancellation, percent_of_cancel) values ('4ee275b4-4c65-11ec-81d3-0242ac130003', 'Brod Marina','Petra Drapsina 13','Bord je opremljen savremenom opremom i omogcava vam komforno visesatno putovanje', 'Trcanje skakanje i sve ostalo je dozvoljeno','581dc9d4-4c66-11ec-81d3-0242ac130003','1520', 'FREE','0');
@@ -72,13 +72,13 @@ insert into unit(id, name, address, description, rules, album_id, price, cancell
 insert into unit(id, name, address, description, rules, album_id, price, cancellation, percent_of_cancel) values ('fb80c9d2-4c6b-11ec-81d3-0242ac130003', 'Casovi pecanja','Brace Ribnikar 18','Najbolji instruktor u gradu.', 'Dozvoljeno pecanje iskljucivo u prisustvu instruktora','0d882300-4c6c-11ec-81d3-0242ac130003','2000', 'NEEDTOPAY','30');
 
 --boats
-insert into boat(id,power,length,max_speed,capacity) values ('4ee275b4-4c65-11ec-81d3-0242ac130003', '120', '520','20','6');
+insert into boat(id,power,length,max_speed,capacity,owner_id) values ('4ee275b4-4c65-11ec-81d3-0242ac130003', '120', '520','20','6','80c86094-ba60-11eb-8529-0242ac130003');
 
 --cottages
-insert into cottage(id,number_of_rooms,number_beds_per_room) values ('f3001024-4c6b-11ec-81d3-0242ac130003','4','2');
+insert into cottage(id,number_of_rooms,number_beds_per_room,owner_id) values ('f3001024-4c6b-11ec-81d3-0242ac130003','4','2','07a2c302-b584-11eb-8529-0242ac130003');
 
 --courses
-insert into fishing_course(id,biography) values('fb80c9d2-4c6b-11ec-81d3-0242ac130003', 'Visestruki evropski sampion u ribolovu');
+insert into fishing_course(id,biography,instructor_id) values('fb80c9d2-4c6b-11ec-81d3-0242ac130003', 'Visestruki evropski sampion u ribolovu','aef9fa80-b584-11eb-8529-0242ac130003');
 
 --fishing equipment
 insert into fishing_equipment(id,name) values ('3b0de840-4c6d-11ec-81d3-0242ac130003','FISHINGRODS');

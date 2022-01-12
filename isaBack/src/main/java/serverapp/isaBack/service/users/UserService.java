@@ -54,7 +54,7 @@ public class UserService implements IUserService{
 	public UUID getLoggedUserId() {
 		
 		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		System.out.println(currentUser.getName() + " Pronadjem pacijent");
+		System.out.println(currentUser.getName() + " Pronadjen user");
 		String email = currentUser.getName();
 		User user = userRepository.findByEmail(email);
 		

@@ -3,6 +3,7 @@ package serverapp.isaBack.model;
 import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Cottage extends Unit{
@@ -10,6 +11,8 @@ public class Cottage extends Unit{
 	
 	private int numberBedsPerRoom;
 	
+	@ManyToOne
+	private CottageOwner owner;
 	
 
 	public Cottage() {
@@ -18,10 +21,11 @@ public class Cottage extends Unit{
 	}
 
 	public Cottage(String name, String address, String description, String rules, Album album, double price,
-			Cancellation cancellation, int percentOfCancel, int numberOfRooms, int numberBedsPerRoom) {
+			Cancellation cancellation, int percentOfCancel, int numberOfRooms, int numberBedsPerRoom, CottageOwner owner) {
 		super(UUID.randomUUID(),name, address, description, rules, album, price, cancellation, percentOfCancel);
 		this.numberOfRooms = numberOfRooms;
 		this.numberBedsPerRoom = numberBedsPerRoom;
+		this.owner=owner;
 	}
 
 	public int getNumberOfRooms() {
@@ -38,6 +42,14 @@ public class Cottage extends Unit{
 
 	public void setNumberBedsPerRoom(int numberBedsPerRoom) {
 		this.numberBedsPerRoom = numberBedsPerRoom;
+	}
+
+	public CottageOwner getOwner() {
+		return owner;
+	}
+
+	public void setOwner(CottageOwner owner) {
+		this.owner = owner;
 	}
 	
 	

@@ -71,6 +71,10 @@ class Header extends React.Component{
                 <Link to="/cottages">
                 <ReactBootStrap.Nav.Link href="#deets" >Vikendice</ReactBootStrap.Nav.Link>
                 </Link>
+
+                <Link to="/courses">
+                <ReactBootStrap.Nav.Link href="#deets" >Časovi pecanja</ReactBootStrap.Nav.Link>
+                </Link>
                
                   
                 <ReactBootStrap.NavDropdown alignRight title="Korisnik" id="collasible-nav-dropdown">

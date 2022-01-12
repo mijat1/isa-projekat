@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 
 @Entity
@@ -34,12 +35,13 @@ public class Boat extends Unit{
             inverseJoinColumns = @JoinColumn(name = "fe_id", referencedColumnName = "id"))
     private List<FishingEquipment> fEqupment;
 	
-	
+	@ManyToOne
+	private BoatOwner owner;
 	
 
 	public Boat(String name, String address, String description, String rules, Album album, double price,
 			Cancellation cancellation, int percentOfCancel, double power, double length, double maxSpeed, int capacity,
-			List<NavigationEquipment> naviEqipment, List<FishingEquipment> fEqupment) {
+			List<NavigationEquipment> naviEqipment, List<FishingEquipment> fEqupment,BoatOwner owner) {
 		super(UUID.randomUUID(),name, address, description, rules, album, price, cancellation, percentOfCancel);
 		this.power = power;
 		this.length = length;
@@ -47,8 +49,10 @@ public class Boat extends Unit{
 		this.capacity = capacity;
 		this.naviEqipment = naviEqipment;
 		this.fEqupment = fEqupment;
+		this.owner=owner;
 	}
 
+	
 
 	public Boat() {
 		super();
@@ -104,7 +108,31 @@ public class Boat extends Unit{
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
+
+
+
+	public BoatOwner getOwner() {
+		return owner;
+	}
+
+
+
+	public void setOwner(BoatOwner owner) {
+		this.owner = owner;
+	}
+
+
+
+	public List<FishingEquipment> getfEqupment() {
+		return fEqupment;
+	}
+
+
+
+	public void setfEqupment(List<FishingEquipment> fEqupment) {
+		this.fEqupment = fEqupment;
+	}
 	
-	
+
 	
 }
