@@ -13,10 +13,13 @@ import serverapp.isaBack.DTO.entities.BoatDTO;
 import serverapp.isaBack.DTO.entities.CottageDTO;
 import serverapp.isaBack.DTO.entities.CourseDTO;
 import serverapp.isaBack.DTO.entities.OtherTagDTO;
+import serverapp.isaBack.DTO.entities.UnitDTO;
 import serverapp.isaBack.model.Boat;
 import serverapp.isaBack.model.Cottage;
 import serverapp.isaBack.model.FishingCourse;
 import serverapp.isaBack.model.OtherTag;
+import serverapp.isaBack.model.Unit;
+import serverapp.isaBack.model.User;
 import serverapp.isaBack.unspecifiedDTO.UnspecifiedDTO;
 
 @Service
@@ -97,6 +100,27 @@ public class UnitMapper {
 		
 		return retVal;
 		
+	}
+	
+	public UnspecifiedDTO<UnitDTO> mapUnitToUnitDTO(Unit unit) throws IOException{
+		if(unit == null) 
+			throw new IllegalArgumentException();
+		String basePath = new File("").getAbsolutePath();
+		System.out.println("putanjaaaa "+basePath);
+		byte[] imageBytes=null;
+		if(!unit.getAlbum().getImages().isEmpty()) {
+			System.out.println("slikaaa "+ unit.getAlbum().getImages().get(0).getFileName());
+			imageBytes = extractBytes(basePath+"\\src\\main\\java\\serverapp\\isaBack\\images\\" + unit.getAlbum().getImages().get(0).getFileName());
+		}else {
+			System.out.println("iiiiiiiiiinjee");
+			imageBytes = extractBytes(basePath+"\\src\\main\\java\\serverapp\\isaBack\\images\\nemaslike.png");
+		}
+		//System.out.println("slikaaa "+ unit.getAlbum().getImages().get(0).getFileName());
+		
+ 		
+ 		
+		
+		return new UnspecifiedDTO<UnitDTO> (unit.getId(), new UnitDTO( unit.getName(),imageBytes));
 	}
 	
 	private byte[] extractBytes (String ImageName) throws IOException{

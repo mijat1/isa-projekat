@@ -79,7 +79,7 @@ class Header extends React.Component{
                
                 <ReactBootStrap.NavDropdown alignRight title="Rezervacije" id="collasible-nav-dropdown" hidden={!this.hasRole("ROLE_CLIENT")} >
 
-                    <ReactBootStrap.NavDropdown.Item href="/">Brodovi</ReactBootStrap.NavDropdown.Item>
+                    <ReactBootStrap.NavDropdown.Item href="/boatFutureReservation">Brodovi</ReactBootStrap.NavDropdown.Item>
                     <ReactBootStrap.NavDropdown.Divider />
                     <ReactBootStrap.NavDropdown.Item href="/">Vikendice</ReactBootStrap.NavDropdown.Item>
                     <ReactBootStrap.NavDropdown.Divider />

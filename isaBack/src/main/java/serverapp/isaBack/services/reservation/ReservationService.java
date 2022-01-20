@@ -1,6 +1,8 @@
 package serverapp.isaBack.services.reservation;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -10,7 +12,12 @@ import javax.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import serverapp.isaBack.DTO.entities.UnitDTO;
 import serverapp.isaBack.DTO.reservation.NewReservationDTO;
+import serverapp.isaBack.DTO.reservation.ReservationDTO;
+import serverapp.isaBack.DTO.users.UserNameDTO;
+import serverapp.isaBack.mappers.entities.ReservationMapper;
+import serverapp.isaBack.mappers.entities.UnitMapper;
 import serverapp.isaBack.model.AvailablePeriod;
 import serverapp.isaBack.model.Boat;
 import serverapp.isaBack.model.Client;
@@ -28,6 +35,7 @@ import serverapp.isaBack.repository.UnitRepository;
 import serverapp.isaBack.repository.UserRepository;
 import serverapp.isaBack.service.interfaces.IReservationService;
 import serverapp.isaBack.service.interfaces.IUserService;
+import serverapp.isaBack.unspecifiedDTO.UnspecifiedDTO;
 
 @Service
 public class ReservationService implements IReservationService{
@@ -52,6 +60,9 @@ public class ReservationService implements IReservationService{
 	
 	@Autowired
 	private UnitRepository  unitRepository;
+	
+	private UnitMapper unitMapper= new UnitMapper();
+	private ReservationMapper resMapper= new ReservationMapper();
 	
 	@Override	
 	public List<Unit> findAllFreeBoats(Date startDate, Date endDate) {
@@ -198,6 +209,156 @@ public class ReservationService implements IReservationService{
 				throw new IllegalArgumentException("Klijent ima već rezervaciju za brod u izabranom terminu");
 	}
 	
+	@Override
+	public List<UnspecifiedDTO<ReservationDTO>> findAllFutureClientBoatReservation(ReservationType reservationType) throws IOException {
+		
+		UUID logedClientID= userService.getLoggedUserId();
+		List<Reservation> reservations = reservationRepository.findAllFutureClientsReservation(logedClientID, reservationType); 
+		System.out.println(reservations);
+		List<User> owners= userRepository.findAll();
+		List<Unit> units=unitRepository.findAll();
+		List<UnspecifiedDTO<UserNameDTO>> ownerNames= new ArrayList<UnspecifiedDTO<UserNameDTO>>();
+		List<UnspecifiedDTO<UnitDTO>> unitsDTOs= new ArrayList<UnspecifiedDTO<UnitDTO>>();
+		for(User o : owners) {
+			ownerNames.add(new UnspecifiedDTO<UserNameDTO>(o.getId(),new UserNameDTO(o.toString())));
+		}
+	  for(Unit u : units) {
+		unitsDTOs.add(unitMapper.mapUnitToUnitDTO(u));
+	  }
+		System.out.println("INJEeee");
+		List<UnspecifiedDTO<ReservationDTO>> freeReservations=  resMapper.MapReservationToReservationDTO(reservations,unitsDTOs,ownerNames);             
+		
+		
+		return freeReservations;
+		
+	}
+	
+	@Override
+	public List<UnspecifiedDTO<ReservationDTO>> findAllHistoryClientReservation(ReservationType reservationType) throws IOException {
+		
+		UUID logedClientID= userService.getLoggedUserId();
+		List<Reservation> reservations = reservationRepository.findAllHistoryClientsReservation(logedClientID, reservationType); 
+		System.out.println(reservations);
+		List<User> owners= userRepository.findAll();
+		List<Unit> units=unitRepository.findAll();
+		List<UnspecifiedDTO<UserNameDTO>> ownerNames= new ArrayList<UnspecifiedDTO<UserNameDTO>>();
+		List<UnspecifiedDTO<UnitDTO>> unitsDTOs= new ArrayList<UnspecifiedDTO<UnitDTO>>();
+		for(User o : owners) {
+			ownerNames.add(new UnspecifiedDTO<UserNameDTO>(o.getId(),new UserNameDTO(o.toString())));
+		}
+	  for(Unit u : units) {
+		unitsDTOs.add(unitMapper.mapUnitToUnitDTO(u));
+	  }
+		System.out.println("Istorijaaaa");
+		List<UnspecifiedDTO<ReservationDTO>> freeReservations=  resMapper.MapReservationToReservationDTO(reservations,unitsDTOs,ownerNames);             
+		
+		
+		return freeReservations;
+		
+	}
+	
+	
 
+	@Override
+	public List<UnspecifiedDTO<ReservationDTO>> findAllHistoryClientsReservationsSortByPriceAscending(ReservationType resrvationType) throws Exception {
+				
+		List<UnspecifiedDTO<ReservationDTO>> sorterdReservations= findAllHistoryClientReservation(resrvationType);             
+		
+		if(sorterdReservations==null)
+			throw new Exception(" The list is null");
+		
+		Collections.sort(sorterdReservations, (reservation1, reservation2) -> Double.compare(reservation1.EntityDTO.getPrice(), reservation2.EntityDTO.getPrice()));
+		
+		
+		return sorterdReservations;
+		
+	}
+	
+	
+	@Override
+	public List<UnspecifiedDTO<ReservationDTO>> findAllHistoryClientsReservationsSortByPriceDescending(ReservationType resrvationType) throws Exception {
+				
+		List<UnspecifiedDTO<ReservationDTO>> sorterdReservations=  findAllHistoryClientReservation(resrvationType);             
+		
+		if(sorterdReservations==null)
+			throw new Exception(" The list is null");
+		
+		Collections.sort(sorterdReservations, (reservation1, reservation2) -> Double.compare(reservation1.EntityDTO.getPrice(), reservation2.EntityDTO.getPrice()));
+		Collections.reverse(sorterdReservations);
+		
+		return sorterdReservations;
+		
+	}
+	
+	
+	@Override
+	public List<UnspecifiedDTO<ReservationDTO>> findAllHistoryClientsReservationsSortByDateAscending(ReservationType resrvationType) throws Exception {
+				
+		List<UnspecifiedDTO<ReservationDTO>> sorterdReservations=  findAllHistoryClientReservation(resrvationType);             
+		
+		if(sorterdReservations==null)
+			throw new Exception(" The list is null");
+		
+		Collections.sort(sorterdReservations, (reservation1, reservation2) -> Double.compare(reservation1.EntityDTO.getStartDateTime().getTime(), reservation2.EntityDTO.getStartDateTime().getTime()));
+		
+		
+		return sorterdReservations;
+		
+	}
+	
+	
+	@Override
+	public List<UnspecifiedDTO<ReservationDTO>> findAllHistoryClientsReservationsSortByDateDescending(ReservationType resrvationType) throws Exception {
+				
+		List<UnspecifiedDTO<ReservationDTO>> sorterdReservations=  findAllHistoryClientReservation(resrvationType);             
+		
+		if(sorterdReservations==null)
+			throw new Exception(" The list is null");
+		
+		Collections.sort(sorterdReservations, (reservation1, reservation2) -> Double.compare(reservation1.EntityDTO.getStartDateTime().getTime(), reservation2.EntityDTO.getStartDateTime().getTime()));
+		Collections.reverse(sorterdReservations);
+		
+		return sorterdReservations;
+		
+	}
+	
+	
+	
+	
+	@Override
+	public List<UnspecifiedDTO<ReservationDTO>> findAllHistoryClientsReservationsSortByDurationAscending(ReservationType resrvationType) throws Exception {
+				
+		List<UnspecifiedDTO<ReservationDTO>> sorterdReservations=  findAllHistoryClientReservation(resrvationType);             
+		
+		if(sorterdReservations==null)
+			throw new Exception(" The list is null");
+		
+		Collections.sort(sorterdReservations, (reservation1, reservation2) -> Double.compare(reservation1.EntityDTO.getEndDateTime().getTime() - reservation1.EntityDTO.getStartDateTime().getTime(),       
+				reservation2.EntityDTO.getEndDateTime().getTime() - reservation2.EntityDTO.getStartDateTime().getTime()));
+		
+		return sorterdReservations;
+		
+	}
+	
+	
+	
+	@Override
+	public List<UnspecifiedDTO<ReservationDTO>> findAllHistoryClientsReservationsSortByDurationDescending(ReservationType resrvationType) throws Exception {
+				
+		List<UnspecifiedDTO<ReservationDTO>> sorterdReservations=  findAllHistoryClientReservation(resrvationType);             
+		
+		if(sorterdReservations==null)
+			throw new Exception(" The list is null");
+		
+		Collections.sort(sorterdReservations, (reservation1, reservation2) -> Double.compare(reservation1.EntityDTO.getEndDateTime().getTime() - reservation1.EntityDTO.getStartDateTime().getTime(),       
+				reservation2.EntityDTO.getEndDateTime().getTime() - reservation2.EntityDTO.getStartDateTime().getTime()));
+		
+		Collections.reverse(sorterdReservations);
+		
+		return sorterdReservations;
+		
+	}
+	
+	
 	
 }

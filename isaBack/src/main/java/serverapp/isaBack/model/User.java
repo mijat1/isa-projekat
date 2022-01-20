@@ -230,5 +230,8 @@ public class User implements UserDetails {
 		this.phoneNumber = phoneNumber;
 	}
 		
-	
+	@Override
+	public String toString() {
+		return getName()+" "+getSurname();
+	}
 }

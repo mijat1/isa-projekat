@@ -8,6 +8,8 @@ import BoatsPage from './Pages/Boats/BoatsPage';
 import CottagesPage from './Pages/Cottages/CottagesPage';
 import CoursesPage from './Pages/Courses/CoursesPage';
 import UserProfilePage from "./Pages/UserProfile";
+import BoatFutureReservationsPage from './Pages/Boats/BoatFutureReservationsPage'
+import BoatHistoryReservationsPage from './Pages/Boats/BoatHistoryReservationsPage'
 import {
   BrowserRouter as Router,
   Route,
@@ -34,6 +36,8 @@ function App() {
         <Route  to ="/boats" path ="/boats"  component={BoatsPage}/>
         <Route  to ="/cottages" path ="/cottages"  component={CottagesPage}/>
         <Route  to ="/courses" path ="/courses"  component={CoursesPage}/>
+        <Route  to ="/boatFutureReservation" path ="/boatFutureReservation"  component={BoatFutureReservationsPage}/>
+        <Route  to ="/historyBoatReservation" path ="/historyBoatReservation"  component={BoatHistoryReservationsPage}/>
         <Route  to ="/userProfile" path ="/userProfile"  component={UserProfilePage}/>
         </Switch>
     </Router>
