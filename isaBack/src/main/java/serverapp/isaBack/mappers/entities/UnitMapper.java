@@ -38,10 +38,10 @@ public class UnitMapper {
 		System.out.println("slikaaa "+ boat.getAlbum().getImages().get(0).getFileName());
 		
  		List<UnspecifiedDTO<OtherTagDTO>> tags= MapTagToTagDTO(boat.getServices());
- 		tags.add(new UnspecifiedDTO<OtherTagDTO>(UUID.randomUUID(),new OtherTagDTO("osnovna cena",boat.getPrice())));
+ 		//tags.add(new UnspecifiedDTO<OtherTagDTO>(UUID.randomUUID(),new OtherTagDTO("osnovna cena",boat.getPrice())));
 		
 		return new UnspecifiedDTO<BoatDTO> (boat.getId(), new BoatDTO( boat.getName(), boat.getAddress(),
-				boat.getDescription(),imageBytes,tags,avgGrade));
+				boat.getDescription(),imageBytes,tags,avgGrade,boat.getPrice()));
 	}
 	
 	public UnspecifiedDTO<CottageDTO> MapCottageToCottageDTO(Cottage cottage,double avgGrade) throws IOException{

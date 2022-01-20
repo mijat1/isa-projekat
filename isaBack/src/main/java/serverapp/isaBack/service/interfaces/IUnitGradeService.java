@@ -4,6 +4,6 @@ import java.util.UUID;
 
 public interface IUnitGradeService {
 
-	double getAvgGradeForEmployee(UUID unitId);
+	double getAvgGradeForUnit(UUID unitId);
 
 }

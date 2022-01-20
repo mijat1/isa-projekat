@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import Axios from "axios";
 import Header from '../../Components/Header';
 import GetAuthorisation from "../../Funciton/GetAuthorisation"
-
+import DatePicker from "react-datepicker";
 import 'react-confirm-alert/src/react-confirm-alert.css'; 
 import { confirmAlert } from 'react-confirm-alert';
 import PriceModal from "../../Components/Modal/PriceModal";
+import "react-datepicker/dist/react-datepicker.css";
+import Services from "../../Components/Modal/Services";
 
 const API_URL = "http://localhost:8080";
 
@@ -16,32 +18,45 @@ class BoatsPage extends Component {
 	state = {
 		boats: [],
 		services: [],
-		searchName: "",
-		searchGradeFrom: "",
-		searchGradeTo: "",
-		searchDateFrom: "",
-		searchDateTo: "",
-		searchMan: "",
-		
-		grade: 1,
+		selectedBoat:"",
+		selectedBoatImage:"",
+		selectedBoatName:"",
+		selectedBoatAddress:"",
+		selectedBoatGrade: "",		
+		selectedBoatDescription:"",
+		selectedBoatPrice:"",
+		selectedDate: new Date(),
+		hours: new Date().getHours(),
+		minutes: new Date().getMinutes(),
+		days:0,
+		location:"",
+		gradeFrom:"",
+		gradeTo:"",
+		people:0,
 		maxCount: "",
 		price: 0,
-	
+		startDate:new Date(),
+		endDate:new Date(),
 		hiddenSuccessfulAlert: true,
 		successfulHeader: "",
 		successfulMessage: "",
 		hiddenUnsuccessfulAlert: true,
 		unsuccessfulHeader: "",
 		unsuccessfulMessage: "",
-		
-		openPriceModal:false
+		showSearchForm:false,
+		showingSearched:false,
+		openPriceModal:false,
+		openReserveModal:false,
+		loggedClient: false,
+		isUnitEmpty : false
 	};
 
-    handleFormToogle = () => {
-		this.setState({ formShowed: !this.state.formShowed });
-	};
+	handleFormShow = () => {
+        this.setState({ showSearchForm: !this.state.showSearchForm });
+    };
 
 	componentDidMount() {
+		this.state.loggedClient= this.hasRole("ROLE_CLIENT");
 		console.log(localStorage.getItem("keyRole"));
 		Axios.get(API_URL + "/boat/allBoats")
 
@@ -55,22 +70,42 @@ class BoatsPage extends Component {
 
 	}
 
+	hasRole = (requestRole) => {
+		let currentRoles = JSON.parse(localStorage.getItem("keyRole"));
+	
+		if (currentRoles === null) return false;
+	
+	
+		for (let currentRole of currentRoles) {
+		  if (currentRole === requestRole) return true;
+		}
+		return false;
+	  };
+
+
 
 	handleResetSearch = () => {
-		Axios.get(API_URL, {
+		Axios.get(API_URL + "/boat/allBoats", {
 
 			validateStatus: () => true,
 			headers: { Authorization: GetAuthorisation() },
 		})
 			.then((res) => {
 				this.setState({
-					drugs: res.data,
+					boats: res.data,
 					formShowed: false,
 					showingSearched: false,
-					searchDateFrom: "",
-					searchDateTo: "",
-					searchGradeFrom: "",
-					searchGradeTo: "",
+					days:0,
+					location:"",
+					gradeFrom:"",
+					gradeTo:"",
+					people:0,
+					selectedDate: new Date(),
+					hours: new Date().getHours(),
+					minutes: new Date().getMinutes(),
+					price: 0,
+					isUnitEmpty : false
+				
 					
 				});
 			})
@@ -91,6 +126,10 @@ class BoatsPage extends Component {
 		this.setState({ openPriceModal: false });
 	};
 
+	handleReservationModalClose = () => {
+		this.setState({ openReserveModal: false });
+	};
+
     handleShowPrice = (services) => {
 		this.setState({ openPriceModal: true ,services:services});
         console.log("eeeeeeeeeeeeeeeeeeeee");
@@ -98,7 +137,506 @@ class BoatsPage extends Component {
 	};
 
 
+	handleDateChange = (date) => {
+		this.setState({ selectedDate: date });
+	};
+
+	handleMinutesChange = (event) => {
+		if (event.target.value < 0) this.setState({ minutes: 0 });
+        else if (event.target.value > 59) this.setState({ minutes: 59 });
+		else this.setState({ minutes: event.target.value });
+	};
+
+	handleHoursChange = (event) => {
+        if (event.target.value < 0) this.setState({ hours: 0 });
+		else if (event.target.value > 23) this.setState({ hours: 23 });
+		else this.setState({ hours: event.target.value });
+	};
+
+	handleDaysChange = (event) => {
+     this.setState({ days: event.target.value });
+	};
+
+	handlePeopleChange = (event) => {
+		this.setState({ people: event.target.value });
+	   };
+
+	handleLocationChange = (event) => {
+		this.setState({ location: event.target.value });
+	};
+
+	handleGradeFromChange = (event) => {
+		this.setState({ gradeFrom: event.target.value });
+	};
+
+	handleGradeToChange = (event) => {
+		this.setState({ gradeTo: event.target.value });
+	};
+
 	
+
+	handleOnSelect = (boat,services)=>{
+		if(this.state.showingSearched=== true){
+
+		this.setState({ selectedBoat:boat.Id,
+						selectedBoatImage:boat.EntityDTO.image,
+						selectedBoatName:boat.EntityDTO.name,
+					    selectedBoatAddress:boat.EntityDTO.address,
+						selectedBoatGrade: boat.EntityDTO.avgGrade,		
+						selectedBoatDescription:boat.EntityDTO.description,
+						selectedBoatPrice:boat.EntityDTO.price,
+						services:services,
+			           openReserveModal: true
+					   });
+		console.log(this.state.selectedBoatAddress)	;		
+		console.log(this.state.selectedBoatPrice)	;
+		console.log(this.state.services);   
+		}
+
+	};
+
+
+
+
+	handleSearchClick = () => {
+		{
+
+			this.setState({
+			
+				startDate: new Date(
+					this.state.selectedDate.getFullYear(),
+					this.state.selectedDate.getMonth(),
+					this.state.selectedDate.getDate(),
+					this.state.hours,
+					this.state.minutes,
+					0,
+					0
+				).getTime(),
+				
+				hiddenUnsuccessfulAlert: true,
+				UnsuccessfulHeader: "",
+				UnsuccessfulMessage: "",
+			});
+			let dateMin = new Date().getTime() + 3600000;
+			let startDateSelected= new Date(
+				this.state.selectedDate.getFullYear(),
+				this.state.selectedDate.getMonth(),
+				this.state.selectedDate.getDate(),
+				this.state.hours,
+				this.state.minutes,
+				0,
+				0
+			).getTime();
+			
+			let days = this.state.days;
+			let people = this.state.people;
+			let location = this.state.location;
+			let gradeFrom = this.state.gradeFrom;
+			let gradeTo = this.state.gradeTo;
+			
+			if (days === "") days = -1;
+			if (people === "") people = -1;
+			if (location === "") location = "";
+			if (gradeFrom === "") gradeFrom = -1;
+			if (gradeTo === "") gradeTo = -1;
+			if (startDateSelected <= dateMin) {
+				alert("Minimum sat vremena od trenutnog vremena možete rezervisati.")
+			} else  if (days<= 0) {
+				alert("Morate izabrati broj dana")
+			} else  if (people<= 0) {
+				alert("Morate uneti broj ljudi")
+			} 
+			else {
+				let endDaree=new Date(
+					this.state.selectedDate.getFullYear(),
+					this.state.selectedDate.getMonth(),
+					this.state.selectedDate.getDate(),
+					this.state.hours,
+					this.state.minutes,
+					0,
+					0
+				).getTime();
+				endDaree=endDaree+24*60*60*1000*this.state.days
+			this.setState({endDate:endDaree})
+			console.log(this.state.endDate);
+			Axios.get(API_URL+ "/boat/allBoatsWithFreePeriod", {
+				params: {
+					DateTime:startDateSelected,
+					days: days,
+					people: people,
+					location: location,
+					gradeFrom: gradeFrom,
+					gradeTo: gradeTo,
+				
+				},
+				validateStatus: () => true,
+				headers: { Authorization: GetAuthorisation() },
+			})
+				.then((res) => {
+					console.log(res.data);
+					this.setState({
+						boats: res.data,
+						formShowed: false,
+						showingSearched: true,
+					});
+					if(this.state.boats.length!==0){
+						this.setState({ isUnitEmpty: false });
+					}else{
+						this.setState({isUnitEmpty: true });
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		}
+	}
+	};
+
+
+	handleSortByPriceAscending = () => {
+        
+
+		this.setState({
+			
+			startDate: new Date(
+				this.state.selectedDate.getFullYear(),
+				this.state.selectedDate.getMonth(),
+				this.state.selectedDate.getDate(),
+				this.state.hours,
+				this.state.minutes,
+				0,
+				0
+			).getTime(),
+
+			hiddenUnsuccessfulAlert: true,
+			UnsuccessfulHeader: "",
+			UnsuccessfulMessage: "",
+		});
+
+		
+	
+		let startDateSelected= new Date(
+			this.state.selectedDate.getFullYear(),
+			this.state.selectedDate.getMonth(),
+			this.state.selectedDate.getDate(),
+			this.state.hours,
+			this.state.minutes,
+			0,
+			0
+		).getTime();
+
+		let days = this.state.days;
+		let people = this.state.people;
+		let location = this.state.location;
+		let gradeFrom = this.state.gradeFrom;
+		let gradeTo = this.state.gradeTo;
+
+		
+		if (days === "") days = -1;
+		if (people === "") people = -1;
+		if (location === "") location = "";
+		if (gradeFrom === "") gradeFrom = -1;
+			if (gradeTo === "") gradeTo = -1;
+	    
+             console.log("sok");
+			Axios.get( API_URL + "/boat/getAllFreeBoatsForSelectedDate/SortByPriceAscending"  , {
+				params: {
+					DateTime:startDateSelected,
+					days: days,
+					people: people,
+					location: location,
+					gradeFrom: gradeFrom,
+					gradeTo: gradeTo,
+				
+				},
+			validateStatus: () => true,
+			headers: { Authorization: GetAuthorisation() }},
+			)
+				.then((res) => {
+					 if (res.status === 200) {
+						this.setState({ boats: res.data });
+						if(this.state.boats.length!==0){
+							this.setState({ isUnitEmpty: false });
+						}else{
+							this.setState({isUnitEmpty: true });
+						}
+						console.log(res.data);
+					}
+					 if(res.status === 401){
+						 this.props.history.push("/login");
+                        
+                    }
+				})
+				.catch((err) => {
+					console.log(err);
+                    this.setState({ hiddenUnsuccessfulAlert: false, 
+                        UnsuccessfulHeader: "Error", 
+                        UnsuccessfulMessage: "Some error" });
+                    
+				});
+		
+	};
+
+
+
+	handleSortByPriceDescending = () => {
+        
+
+		this.setState({
+			
+			startDate: new Date(
+				this.state.selectedDate.getFullYear(),
+				this.state.selectedDate.getMonth(),
+				this.state.selectedDate.getDate(),
+				this.state.hours,
+				this.state.minutes,
+				0,
+				0
+			).getTime(),
+
+			hiddenUnsuccessfulAlert: true,
+			UnsuccessfulHeader: "",
+			UnsuccessfulMessage: "",
+		});
+
+		let days = this.state.days;
+		let people = this.state.people;
+		let location = this.state.location;
+		let gradeFrom = this.state.gradeFrom;
+		let gradeTo = this.state.gradeTo;
+
+		
+		if (days === "") days = -1;
+		if (people === "") people = -1;
+		if (location === "") location = "";
+		if (gradeFrom === "") gradeFrom = -1;
+			if (gradeTo === "") gradeTo = -1;
+	
+		let startDateSelected= new Date(
+			this.state.selectedDate.getFullYear(),
+			this.state.selectedDate.getMonth(),
+			this.state.selectedDate.getDate(),
+			this.state.hours,
+			this.state.minutes,
+			0,
+			0
+		).getTime();
+
+		
+	    
+             console.log("sok");
+			Axios.get( API_URL + "/boat/getAllFreeBoatsForSelectedDate/SortByPriceDescending" , {
+				params: {
+					DateTime:startDateSelected,
+					days: days,
+					people: people,
+					location: location,
+					gradeFrom: gradeFrom,
+					gradeTo: gradeTo,
+				
+				},
+			validateStatus: () => true,
+			headers: { Authorization: GetAuthorisation() }},
+			)
+				.then((res) => {
+					 if (res.status === 200) {
+						this.setState({ boats: res.data });
+						if(this.state.boats.length!==0){
+							this.setState({ isUnitEmpty: false });
+						}else{
+							this.setState({isUnitEmpty: true });
+						}
+						console.log(res.data);
+					}
+					 if(res.status === 401){
+						 this.props.history.push("/login");
+                        
+                    }
+				})
+				.catch((err) => {
+					console.log(err);
+                    this.setState({ hiddenUnsuccessfulAlert: false, 
+                        UnsuccessfulHeader: "Error", 
+                        UnsuccessfulMessage: "Some error" });
+                    
+				});
+		
+	};
+
+
+
+	handleSortByGradeAscending = () => {
+        
+
+		this.setState({
+			
+			startDate: new Date(
+				this.state.selectedDate.getFullYear(),
+				this.state.selectedDate.getMonth(),
+				this.state.selectedDate.getDate(),
+				this.state.hours,
+				this.state.minutes,
+				0,
+				0
+			).getTime(),
+
+			hiddenUnsuccessfulAlert: true,
+			UnsuccessfulHeader: "",
+			UnsuccessfulMessage: "",
+		});
+
+		
+	
+		let startDateSelected= new Date(
+			this.state.selectedDate.getFullYear(),
+			this.state.selectedDate.getMonth(),
+			this.state.selectedDate.getDate(),
+			this.state.hours,
+			this.state.minutes,
+			0,
+			0
+		).getTime();
+
+		let days = this.state.days;
+		let people = this.state.people;
+		let location = this.state.location;
+		let gradeFrom = this.state.gradeFrom;
+		let gradeTo = this.state.gradeTo;
+
+		
+		if (days === "") days = -1;
+		if (people === "") people = -1;
+		if (location === "") location = "";
+		if (gradeFrom === "") gradeFrom = -1;
+			if (gradeTo === "") gradeTo = -1;
+	    
+             console.log("sok");
+			Axios.get( API_URL + "/boat/getAllFreeBoatsForSelectedDate/SortByGradeAscending" , {
+				params: {
+					DateTime:startDateSelected,
+					days: days,
+					people: people,
+					location: location,
+					gradeFrom: gradeFrom,
+					gradeTo: gradeTo,
+				
+				},
+			validateStatus: () => true,
+			headers: { Authorization: GetAuthorisation() }},
+			)
+				.then((res) => {
+					 if (res.status === 200) {
+						this.setState({ boats: res.data });
+						if(this.state.boats.length!==0){
+							this.setState({ isUnitEmpty: false });
+						}else{
+							this.setState({isUnitEmpty: true });
+						}
+						console.log(res.data);
+					}
+					 if(res.status === 401){
+						 this.props.history.push("/login");
+                        
+                    }
+				})
+				.catch((err) => {
+					console.log(err);
+                    this.setState({ hiddenUnsuccessfulAlert: false, 
+                        UnsuccessfulHeader: "Error", 
+                        UnsuccessfulMessage: "Some error" });
+                    
+				});
+		
+	};
+
+
+	handleSortByGradeDescending = () => {
+        
+
+		this.setState({
+			
+			startDate: new Date(
+				this.state.selectedDate.getFullYear(),
+				this.state.selectedDate.getMonth(),
+				this.state.selectedDate.getDate(),
+				this.state.hours,
+				this.state.minutes,
+				0,
+				0
+			).getTime(),
+
+			hiddenUnsuccessfulAlert: true,
+			UnsuccessfulHeader: "",
+			UnsuccessfulMessage: "",
+		});
+
+		
+	
+		let startDateSelected= new Date(
+			this.state.selectedDate.getFullYear(),
+			this.state.selectedDate.getMonth(),
+			this.state.selectedDate.getDate(),
+			this.state.hours,
+			this.state.minutes,
+			0,
+			0
+		).getTime();
+
+		let days = this.state.days;
+		let people = this.state.people;
+		let location = this.state.location;
+		let gradeFrom = this.state.gradeFrom;
+		let gradeTo = this.state.gradeTo;
+
+		
+		if (days === "") days = -1;
+		if (people === "") people = -1;
+		if (location === "") location = "";
+		if (gradeFrom === "") gradeFrom = -1;
+			if (gradeTo === "") gradeTo = -1;
+	    
+             console.log("sok");
+			Axios.get( API_URL + "/boat/getAllFreeBoatsForSelectedDate/SortByGradeDescending"   , {
+				params: {
+					DateTime:startDateSelected,
+					days: days,
+					people: people,
+					location: location,
+					gradeFrom: gradeFrom,
+					gradeTo: gradeTo,
+				
+				},
+			validateStatus: () => true,
+			headers: { Authorization: GetAuthorisation() }},
+			)
+				.then((res) => {
+					 if (res.status === 200) {
+						this.setState({ boats: res.data });
+						if(this.state.boats.length!==0){
+							this.setState({ isUnitEmpty: false });
+						}else{
+							this.setState({isUnitEmpty: true });
+						}
+						console.log(res.data);
+					}
+					 if(res.status === 401){
+						 this.props.history.push("/login");
+                        
+                    }
+				})
+				.catch((err) => {
+					console.log(err);
+                    this.setState({ hiddenUnsuccessfulAlert: false, 
+                        UnsuccessfulHeader: "Error", 
+                        UnsuccessfulMessage: "Some error" });
+                    
+				});
+		
+	};
+
+	
+
+
 	render() {
 
 
@@ -119,65 +657,152 @@ class BoatsPage extends Component {
 					<div style={{ width: "70%", marginTop: "3em", marginLeft: "auto", marginRight: "auto" }} width="100%">
 
 
-						<button className="btn btn-outline-primary btn-xl" type="button" onClick={this.handleFormToogle}>
+					<button className="btn btn-primary " type="button" onClick={this.handleFormShow}>
+                        {this.state.showSearchForm ? "Zatvori pretragu" : "Otvori pretragu"}
+                    </button>
 
-							Pretraga
+						<button hidden={!this.state.showSearchForm} type="button" class="btn btn-outline-primary btn-xl ml-2" onClick={this.handleResetSearch}>
+
+							Poništi pretragu
+
 						</button>
 
+						<button className="btn btn-outline-primary pull-right" type="button" onClick={this.handleFormShow}>
+                             Akcije
+                    </button>
 						
-						<form className={this.state.formShowed ? "form-inline mt-3" : "form-inline mt-3 collapse"} width="100%" id="formCollapse">
-							<div className="form-group mb-2" width="100%">
-								<input
-									placeholder="Datum od"
-									className="form-control mr-3"
-									style={{ width: "9em" }}
-									type="text"
-									onChange={this.handleDateFromChange}
-									value={this.state.searchDateFrom}
+						<form className={this.state.showSearchForm ? "form-inline mt-3" : "form-inline mt-3 collapse"} width="100%" id="formCollapse">
+						<div className="form-row justify-content-center">
+                            <div className="mr-2">
+								<div style={{ fontSize: "20px" }}>
+                                    Izaberi datum:
+								</div>
+
+								<DatePicker
+									className="form-control"
+									minDate={new Date()}
+									onChange={(date) => this.handleDateChange(date)}
+									selected={this.state.selectedDate}
 								/>
-
+						    </div>
+							<div className="mr-2">
+								<div style={{ fontSize: "20px" }}>
+									Sati:
+								</div>
 								<input
-									placeholder="Datum do"
-									className="form-control mr-3"
-									style={{ width: "9em" }}
-									type="text"
-									onChange={this.handleDateToChange}
-									value={this.state.searchDateTo}
+                                    type="number"
+									min="00"
+									max="23"
+                                    className="form-control"
+									onChange={this.handleHoursChange}
+									value={this.state.hours}
+									style={{ width: "8em" }}
+									
 								/>
-
+							</div>
+							<div className="mr-2">
+								<div style={{ fontSize: "20px" }}>
+                                    Minuti:
+								</div>
 								<input
-									placeholder="Lokacija"
-									className="form-control mr-3"
-									style={{ width: "9em" }}
-									type="text"
-									onChange={this.handleManChange}
-									value={this.state.searchMan}
+									min="00"
+                                    max="59"
+                                    type="number"
+									className="form-control"
+									onChange={this.handleMinutesChange}
+									value={this.state.minutes}
+									style={{ width: "8em" }}
+									
+									
 								/>
+							</div>
 
-
+							<div className="mr-2">
+								<div style={{ fontSize: "20px" }}>
+                                    Broj dana:
+								</div>
 								<input
-									placeholder="Ocena od"
-									className="form-control mr-3"
-									style={{ width: "9em" }}
-									type="number"
-									min="0"
+									min="00"
+                                    max="59"
+                                    type="number"
+									className="form-control"
+									onChange={this.handleDaysChange}
+									value={this.state.days}
+									style={{ width: "8em" }}
+									
+									
+								/>
+							</div>
+
+							<div className="mr-2">
+								<div style={{ fontSize: "20px" }}>
+                                    Broj osoba:
+								</div>
+								<input
+                                    type="number"
+									className="form-control"
+									onChange={this.handlePeopleChange}
+									value={this.state.people}
+									style={{ width: "8em" }}
+									
+									
+								/>
+							</div>
+
+
+
+							<div className="mr-2">
+								<div style={{ fontSize: "20px" }}>
+                                    Lokacija:
+								</div>
+								<input
+                                    type="text"
+									className="form-control "
+									onChange={this.handleLocationChange}
+									value={this.state.location}
+									style={{ width: "8em" }}
+									
+									
+								/>
+							</div>
+
+							<div className="mr-2">
+								<div style={{ fontSize: "20px" }}>
+                                    Ocena od:
+								</div>
+								<input
+                                    min="0"
 									max="5"
+                                    type="number"
+									className="form-control"
 									onChange={this.handleGradeFromChange}
-									value={this.state.searchGradeFrom}
+									value={this.state.gradeFrom}
+									style={{ width: "8em" }}
+									
+									
 								/>
-								<input
-									placeholder="Ocena do"
-									className="form-control mr-3"
-									style={{ width: "9em" }}
-									type="number"
-									min="0"
-									max="5"
-									onChange={this.handleGradeToChange}
-									value={this.state.searchGradeTo}
-								/>
+							</div>
 
+							<div className="mr-2">
+								<div style={{ fontSize: "20px" }}>
+                                    Ocena do:
+								</div>
+								<input
+                                    min="0"
+									max="5"
+                                    type="number"
+									className="form-control"
+									onChange={this.handleGradeToChange}
+									value={this.state.gradeTo}
+									style={{ width: "8em" }}
+									
+									
+								/>
+							</div>
+							<div className="mr-2" >	
+							
 								<button
-									style={{ background: "#1977cc" }}
+									style={{ background: "#1977cc" , marginTop:"30px"}}
 									onClick={this.handleSearchClick}
 									className="btn btn-primary btn-x2"
 									type="button"
@@ -185,17 +810,51 @@ class BoatsPage extends Component {
 									<i className="icofont-search mr-1"></i>
 									Pretraži
 								</button>
+							</div>	
 							</div>
 						</form>
 
-						<div className={this.state.showingSearched ? "form-group mt-2" : "form-group mt-2 collapse"}>
-							<button type="button" className="btn btn-outline-secondary" onClick={this.handleResetSearch}>
-								<i className="icofont-close-line mr-1"></i>Reset
-							</button>
+						<div className="form-row mt-3" hidden={!this.state.showingSearched}>
+								<div className="form-col">
+									<div className="dropdown">
+										<button
+											className="btn btn-primary dropdown-toggle"
+											type="button"
+											id="dropdownMenu2"
+											data-toggle="dropdown"
+											aria-haspopup="true"
+											aria-expanded="false"
+										>
+											Sortiraj po
+										</button>
+										<div className="dropdown-menu" aria-labelledby="dropdownMenu2">
+											<button className="dropdown-item" type="button" onClick={this.handleSortByGradeAscending}>
+												Oceni rastuće
+											</button>
+											<button className="dropdown-item" type="button" onClick={this.handleSortByGradeDescending}>
+												Oceni opadajuće
+											</button>
+											<button className="dropdown-item" type="button" onClick={this.handleSortByPriceAscending}>
+												Ceni rastuće
+											</button>
+											<button className="dropdown-item" type="button" onClick={this.handleSortByPriceDescending}>
+												Ceni opadajuće
+											</button>
+										</div>
+									</div>
+								</div>
+								<div className="form-col ml-3">
+									<div className={this.props.showingSorted ? "form-group" : "form-group collapse"}>
+										<button type="button" className="btn btn-outline-secondary" onClick={this.props.handleResetSort}>
+											<i className="icofont-close-line mr-1"></i>Reset criteria
+										</button>
+									</div>
+								</div>
 						</div>
-
-
-						<table className={"table"} style={{ width: "85%", marginTop: "3rem" }}>
+						<h5 className=" text-center  mt-3  text-danger" hidden={!this.state.isUnitEmpty}>
+						Trenutno nema slobodnih entiteta za izabrane kriterijume.
+						</h5>
+						<table className={(this.state.loggedClient === true && this.state.showingSearched===true) ? "table table-hover" : "table"} style={{ width: "85%", marginTop: "3rem" }}>
 							<tbody>
 								{this.state.boats.map((boat) => (
 									<tr id={boat.Id} key={boat.Id} >
@@ -204,7 +863,7 @@ class BoatsPage extends Component {
 												<img className="img-fluid" src={`data:image/jpeg;base64,${boat.EntityDTO.image}`} width="300em"  />
 											</div>
 										</td>
-										<td width="50%" > 
+										<td width="50%" onClick={() => this.handleOnSelect(boat,boat.EntityDTO.services)}> 
 											<div style={{ marginTop: "2%" }}>
 												<b>Naziv:</b> {boat.EntityDTO.name}
 											</div>
@@ -217,6 +876,9 @@ class BoatsPage extends Component {
 											</div>
                                             <div>
 												<b>Kratak opis:</b> {boat.EntityDTO.description}
+											</div>
+											<div>
+												<b>Cena:</b> {boat.EntityDTO.price}
 											</div>
 										</td>
                                         <td className="align-middle">
@@ -243,7 +905,20 @@ class BoatsPage extends Component {
 
 					</div>
 
-
+					<Services show={this.state.openReserveModal}
+					 onCloseModal={this.handleReservationModalClose} 
+					 startDate={this.state.startDate}
+					 endDate={this.state.endDate}
+					 days={this.state.days}
+					 prices={this.state.services} 
+					 image=   {this.state.selectedBoatImage}
+					 name=	{this.state.selectedBoatName}
+					 address=   {this.state.selectedBoatAddress}
+					 grade=	{this.state.selectedBoatGrade}	
+					 description=	{this.state.selectedBoatDescription}
+					 price=	{this.state.selectedBoatPrice}
+					 boatId={this.state.selectedBoat}  
+					  />				
                     <PriceModal show={this.state.openPriceModal} onCloseModal={this.handleModalClose} prices={this.state.services}  header="Cenovnik" />
 				</div>
 

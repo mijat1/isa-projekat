@@ -53,7 +53,7 @@ public class CottageService implements ICottageService{
 	
 	public double getAvgGradeForUnit(UUID unitId){
 		
-		return unitGradeService.getAvgGradeForEmployee(unitId);
+		return unitGradeService.getAvgGradeForUnit(unitId);
 		
 		}
 

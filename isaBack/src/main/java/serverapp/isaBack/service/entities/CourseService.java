@@ -57,7 +57,7 @@ public class CourseService implements ICourseService{
 	
 	public double getAvgGradeForUnit(UUID unitId){
 		
-		return unitGradeService.getAvgGradeForEmployee(unitId);
+		return unitGradeService.getAvgGradeForUnit(unitId);
 		
 		}
 

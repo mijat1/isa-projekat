@@ -53,6 +53,11 @@ public class Unit {
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private List<OtherTag> services;
 
+	 @Enumerated(EnumType.STRING)
+	   	@Column(name="unitType")
+	   	private UnitType unitType;
+	    
+	
 
 	public Unit() {
 	}
@@ -85,6 +90,24 @@ public class Unit {
 		this.cancellation = cancellation;
 		if(cancellation==Cancellation.FREE)
 		  this.percentOfCancel = 0;
+	}
+	
+	
+
+	public Unit(UUID id, String name, String address, String description, String rules, Album album, double price,
+			Cancellation cancellation, int percentOfCancel, List<OtherTag> services, UnitType unitType) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.address = address;
+		this.description = description;
+		this.rules = rules;
+		this.album = album;
+		this.price = price;
+		this.cancellation = cancellation;
+		this.percentOfCancel = percentOfCancel;
+		this.services = services;
+		this.unitType = unitType;
 	}
 
 	public UUID getId() {

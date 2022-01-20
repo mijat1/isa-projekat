@@ -15,7 +15,7 @@ public class UnitGradeService implements IUnitGradeService{
 	UnitFeedbackRepository unitGradeRepository;
 	
 	@Override
-	public double getAvgGradeForEmployee(UUID unitId) {
+	public double getAvgGradeForUnit(UUID unitId) {
 		double avgGrade;
 		try {
 			avgGrade = unitGradeRepository.getAvgGradeForUnit(unitId);

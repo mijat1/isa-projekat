@@ -67,12 +67,14 @@ insert into album_images(album_id, images_id) values ('581dc9d4-4c66-11ec-81d3-0
 insert into album_images(album_id, images_id) values ('0756466a-4c6c-11ec-81d3-0242ac130003','1ea0cfca-4c6c-11ec-81d3-0242ac130003');
 
 --units
-insert into unit(id, name, address, description, rules, album_id, price, cancellation, percent_of_cancel) values ('4ee275b4-4c65-11ec-81d3-0242ac130003', 'Brod Marina','Petra Drapsina 13','Bord je opremljen savremenom opremom i omogcava vam komforno visesatno putovanje', 'Trcanje skakanje i sve ostalo je dozvoljeno','581dc9d4-4c66-11ec-81d3-0242ac130003','1520', 'FREE','0');
-insert into unit(id, name, address, description, rules, album_id, price, cancellation, percent_of_cancel) values ('f3001024-4c6b-11ec-81d3-0242ac130003', 'Vila Moskva','Temerinska 25','Vikendica sadrzi sve', 'Zabranjeno paljenje vatre u dvoristu','0756466a-4c6c-11ec-81d3-0242ac130003','1250', 'NEEDTOPAY','25');
-insert into unit(id, name, address, description, rules, album_id, price, cancellation, percent_of_cancel) values ('fb80c9d2-4c6b-11ec-81d3-0242ac130003', 'Casovi pecanja','Brace Ribnikar 18','Najbolji instruktor u gradu.', 'Dozvoljeno pecanje iskljucivo u prisustvu instruktora','0d882300-4c6c-11ec-81d3-0242ac130003','2000', 'NEEDTOPAY','30');
+insert into unit(id, name, address, description, rules, album_id, price, cancellation, percent_of_cancel,unit_type) values ('4ee275b4-4c65-11ec-81d3-0242ac130003', 'Brod Marina','Petra Drapsina 13','Brod je opremljen savremenom opremom i omogcava vam komforno visesatno putovanje', 'Trcanje skakanje i sve ostalo je dozvoljeno','581dc9d4-4c66-11ec-81d3-0242ac130003','1520', 'FREE','0','BOAT');
+insert into unit(id, name, address, description, rules, album_id, price, cancellation, percent_of_cancel,unit_type) values ('529b7ab2-78b0-11ec-90d6-0242ac120003', 'Brod Pirate','Milana Rakica 18','Prevoz robe reko reke', 'Trcanje skakanje i sve ostalo je dozvoljeno','581dc9d4-4c66-11ec-81d3-0242ac130003','1620', 'FREE','0','BOAT');
+insert into unit(id, name, address, description, rules, album_id, price, cancellation, percent_of_cancel,unit_type) values ('f3001024-4c6b-11ec-81d3-0242ac130003', 'Vila Moskva','Temerinska 25','Vikendica sadrzi sve', 'Zabranjeno paljenje vatre u dvoristu','0756466a-4c6c-11ec-81d3-0242ac130003','1250', 'NEEDTOPAY','25','COTTAGE');
+insert into unit(id, name, address, description, rules, album_id, price, cancellation, percent_of_cancel,unit_type) values ('fb80c9d2-4c6b-11ec-81d3-0242ac130003', 'Casovi pecanja','Brace Ribnikar 18','Najbolji instruktor u gradu.', 'Dozvoljeno pecanje iskljucivo u prisustvu instruktora','0d882300-4c6c-11ec-81d3-0242ac130003','2000', 'NEEDTOPAY','30','COURSE');
 
 --boats
 insert into boat(id,power,length,max_speed,capacity,owner_id) values ('4ee275b4-4c65-11ec-81d3-0242ac130003', '120', '520','20','6','80c86094-ba60-11eb-8529-0242ac130003');
+insert into boat(id,power,length,max_speed,capacity,owner_id) values ('529b7ab2-78b0-11ec-90d6-0242ac120003', '120', '520','20','6','80c86094-ba60-11eb-8529-0242ac130003');
 
 --cottages
 insert into cottage(id,number_of_rooms,number_beds_per_room,owner_id) values ('f3001024-4c6b-11ec-81d3-0242ac130003','4','2','07a2c302-b584-11eb-8529-0242ac130003');
@@ -102,3 +104,13 @@ insert into tags(unit_id,tag_id) values('4ee275b4-4c65-11ec-81d3-0242ac130003','
 insert into tags(unit_id,tag_id) values('f3001024-4c6b-11ec-81d3-0242ac130003','699dcfd8-70ba-11ec-90d6-0242ac120003');
 insert into tags(unit_id,tag_id) values('f3001024-4c6b-11ec-81d3-0242ac130003','84da216c-70b9-11ec-90d6-0242ac120003');
 insert into tags(unit_id,tag_id) values('f3001024-4c6b-11ec-81d3-0242ac130003','6915ec90-70b9-11ec-90d6-0242ac120003');
+
+--available period
+insert into available_period(id, start_date,end_date, start_time,end_time, owner_id, unit_id) values('2fb41318-60d4-11eb-ae93-0242ac130002', '2022-01-02 14:44:03','2022-01-25 23:44:03', 8, 17, '80c86094-ba60-11eb-8529-0242ac130003','4ee275b4-4c65-11ec-81d3-0242ac130003');
+insert into available_period(id, start_date,end_date, start_time,end_time, owner_id, unit_id) values('ed317f36-78b0-11ec-90d6-0242ac120003', '2022-01-02 14:44:03','2022-01-25 23:44:03', 8, 17, '80c86094-ba60-11eb-8529-0242ac130003','529b7ab2-78b0-11ec-90d6-0242ac120003');
+
+--grade
+insert into unit_feedback(id,date,grade,client_id,unit_id) values('2f8d7e22-78af-11ec-90d6-0242ac120003','2022-01-02 14:44:03','4','22793162-52d3-11eb-ae93-0242ac130002','4ee275b4-4c65-11ec-81d3-0242ac130003');
+insert into unit_feedback(id,date,grade,client_id,unit_id) values('cad9aca2-78af-11ec-90d6-0242ac120003','2022-01-03 14:44:03','5','22793162-52d3-11eb-ae93-0242ac130002','4ee275b4-4c65-11ec-81d3-0242ac130003');
+insert into unit_feedback(id,date,grade,client_id,unit_id) values('71bc6d84-78b0-11ec-90d6-0242ac120003','2022-01-03 14:44:03','5','22793162-52d3-11eb-ae93-0242ac130002','529b7ab2-78b0-11ec-90d6-0242ac120003');
+insert into unit_feedback(id,date,grade,client_id,unit_id) values('797c5d5e-78b0-11ec-90d6-0242ac120003','2022-01-03 14:44:03','5','22793162-52d3-11eb-ae93-0242ac130002','529b7ab2-78b0-11ec-90d6-0242ac120003');
