@@ -41,7 +41,7 @@ class ComplaintModal extends Component {
                 <Button  onClick={this.props.giveFeedback}>
 						{this.props.buttonName}
 					</Button>
-					<Button onClick={this.props.onCloseModal}>Close</Button>
+					<Button onClick={this.props.onCloseModal}>Otkaži</Button>
 				</Modal.Footer>
 			</Modal>
 		);

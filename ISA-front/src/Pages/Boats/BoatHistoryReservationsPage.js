@@ -308,12 +308,12 @@ class BoatHistoryReservationsPage extends Component {
 		Axios.post(API_URL +"/complaint/user", ComplaintUserDTO, { validateStatus: () => true, headers: { Authorization: GetAuthorisation() } })
 			.then((resp) => {
 				if (resp.status === 500) {
-					this.setState({ hiddenFailAlert: false, failHeader: "Internal server error", failMessage: "Server error." });
+					alert("Serverska greška")
 				} else if (resp.status === 201) {
 					
 					
 				}
-				this.setState({ showComplaintModal: false });
+				this.setState({ showComplaintModal1: false });
 			})
 			.catch((err) => {
 				console.log(err);

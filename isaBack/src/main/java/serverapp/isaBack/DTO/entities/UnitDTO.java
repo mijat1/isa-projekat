@@ -9,12 +9,15 @@ public class UnitDTO {
 	private String name;
 		
 	private byte[] image;
+	
+	private int percentOfCancel;
 
-	public UnitDTO( String name, byte[] image) {
+	public UnitDTO( String name, byte[] image,int percentOfCancel) {
 		super();
 		
 		this.name = name;
 		this.image = image;
+		this.percentOfCancel = percentOfCancel;
 	}
 
 
@@ -34,6 +37,16 @@ public class UnitDTO {
 
 	public void setImage(byte[] image) {
 		this.image = image;
+	}
+
+
+	public int getPercentOfCancel() {
+		return percentOfCancel;
+	}
+
+
+	public void setPercentOfCancel(int percentOfCancel) {
+		this.percentOfCancel = percentOfCancel;
 	}
 	
 	

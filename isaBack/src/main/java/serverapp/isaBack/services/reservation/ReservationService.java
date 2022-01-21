@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -209,6 +210,29 @@ public class ReservationService implements IReservationService{
 		
 		if(reservationRepository.findAllReservationsForClientInDataRange(reservation.getStartDateTime(), reservation.getEndDateTime(), reservation.getClient().getId()).size() > 0)
 				throw new IllegalArgumentException("Klijent ima već rezervaciju za brod u izabranom terminu");
+	}
+	
+	
+	@Override
+
+	public void cancelReservation(UUID reservationId) {
+		
+		Reservation reservation = reservationRepository.findById(reservationId).get();
+		
+
+		if (reservation==null)
+			throw new EntityNotFoundException("Rezervacija ne postoji");
+		Date currentDate=new Date();
+		Date availableCancel=new Date(currentDate.getTime()+24*60*60*1000*3);
+				if (reservation.getStartDateTime().before(availableCancel))
+			throw new IllegalArgumentException("Nije moguće otkazati rezervaciju ranije od 3 dana.");
+		
+		reservation.setReservationStatus(ReservationStatus.CANCELED);
+	
+		
+		reservationRepository.save(reservation);
+		
+		
 	}
 	
 	@Override

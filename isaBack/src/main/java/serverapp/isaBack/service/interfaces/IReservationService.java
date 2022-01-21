@@ -3,6 +3,7 @@ package serverapp.isaBack.service.interfaces;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import serverapp.isaBack.DTO.reservation.NewReservationDTO;
 import serverapp.isaBack.DTO.reservation.ReservationDTO;
@@ -38,6 +39,8 @@ public interface IReservationService {
 
 	List<UnspecifiedDTO<ReservationDTO>> findAllHistoryClientsReservationsSortByDurationDescending(
 			ReservationType resrvationType) throws Exception;
+
+	void cancelReservation(UUID reservationId);
 
 	
 

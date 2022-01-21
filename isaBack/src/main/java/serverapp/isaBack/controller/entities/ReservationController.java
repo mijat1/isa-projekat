@@ -22,6 +22,7 @@ import serverapp.isaBack.DTO.entities.CourseDTO;
 import serverapp.isaBack.DTO.reservation.NewReservationDTO;
 
 import serverapp.isaBack.DTO.reservation.ReservationDTO;
+import serverapp.isaBack.DTO.users.IdDTO;
 import serverapp.isaBack.model.ReservationType;
 import serverapp.isaBack.service.interfaces.IBoatService;
 import serverapp.isaBack.service.interfaces.ICourseService;
@@ -57,6 +58,27 @@ public class ReservationController {
 		
 		
 	}
+	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@CrossOrigin
+	@PostMapping("/cancelReservation")
+	public ResponseEntity<?>  cancelResercation(@RequestBody IdDTO reservationId) {
+		
+		try {
+			reservationService.cancelReservation(reservationId.getId());
+			return new ResponseEntity<>(reservationId,HttpStatus.OK);
+		
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}	
+			
+		
+	}
+	
 	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@CrossOrigin

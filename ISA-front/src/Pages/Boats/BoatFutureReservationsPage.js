@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import Axios from "axios";
 import Header from '../../Components/Header';
 import GetAuthorisation from "../../Funciton/GetAuthorisation";
-//import DermatologistAppointmentPicture from "../Images/appointment.png" ;
-////import UnsuccessfulAlert from "../Components/Alerts/UnsuccessfulAlert";
-//import SuccessfulAlert from "../Components/Alerts/SuccessfulAlert";
 import {NavLink, Redirect } from "react-router-dom";
+import CancelModal from "../../Components/Modal/CancelModal";
 
 const API_URL="http://localhost:8080";
 
@@ -14,7 +12,10 @@ class BoatFutureReservationsPage extends Component {
   
     
     state = {
-        reservations : []
+        reservations : [],
+        showCancelModal:false,
+        reservationId:"",
+        percentOfCancel:0
     };
 
     constructor(props) {
@@ -78,6 +79,78 @@ class BoatFutureReservationsPage extends Component {
 
        this.props.history.push("/historyBoatReservation");
     }
+
+    handleCancelClick = (reservation) => {
+		console.log(reservation);
+		
+				
+					this.setState({
+						reservationId: reservation.Id,
+						showCancelModal: true,
+                        percentOfCancel : reservation.EntityDTO.unit.EntityDTO.percentOfCancel
+					});
+				
+			
+			
+	};
+    handleCancelReservation = () => {
+  
+        let reservationIdDTO = { id: this.state.reservationId};
+    
+        Axios.post(API_URL + "/reservation/cancelReservation",reservationIdDTO , {
+                validateStatus: () => true,
+                headers: { Authorization: GetAuthorisation() },
+            })
+          .then((res) => {
+            if (res.status === 400) {
+                alert(res.data);
+    
+            } else if (res.status === 500) {
+    
+                alert("Serverska greška")
+    
+            } 
+            else if (res.status === 404) {
+    
+            
+                    alert(res.data);
+      
+            } else if (res.status === 200) {
+              console.log("Success");
+              alert("Uspešno je otkazana rezervacija")
+              this.setState({showCancelModal:false});
+              Axios.get(API_URL + "/reservation/findAllFutureBoatReservationClient", {
+                validateStatus: () => true,
+                headers: { Authorization: GetAuthorisation() },
+            })
+                .then((res) => {
+                    if (res.status === 401) {
+              this.props.history.push('/login');
+                    } else {
+                        this.setState({ reservations: res.data });
+                        console.log(res.data);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+                        
+                    }
+               
+          })
+          .catch((err) => {
+            console.log(err);
+            alert("Greška")
+          
+          });
+    
+        
+      
+    
+      }
+      handleCancelModalClose = () => {
+        this.setState({ showCancelModal: false });
+    };
 
 	render() {
 	
@@ -163,7 +236,7 @@ class BoatFutureReservationsPage extends Component {
 											type="button"
                                             className="btn btn-outline-danger"
 											hidden={this.isAvailableToCanceled(new Date(reservation.EntityDTO.startDateTime))}
-											onClick={() => this.handleCancelReservation(reservation.Id)}
+											onClick={() => this.handleCancelClick(reservation)}
 											
 										>
 											Otkaži rezervaciju
@@ -176,7 +249,13 @@ class BoatFutureReservationsPage extends Component {
                 </div>
 
 
-
+                <CancelModal
+					buttonName="Potvrdi"
+					show={this.state.showCancelModal}
+					onCloseModal={this.handleCancelModalClose}
+					cancelReservation={this.handleCancelReservation}
+					name={this.state.percentOfCancel}
+				/>
           
         </div>
         </React.Fragment>

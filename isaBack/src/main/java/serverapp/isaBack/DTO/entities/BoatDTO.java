@@ -22,6 +22,7 @@ public class BoatDTO {
 	private double price;
 
 	
+	
 
 
 
@@ -35,7 +36,12 @@ public class BoatDTO {
 		this.services = services;
 		this.avgGrade = avgGrade;
 		this.price=price;
+	
 	}
+
+
+
+
 
 
 

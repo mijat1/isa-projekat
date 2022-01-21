@@ -120,7 +120,7 @@ public class UnitMapper {
  		
  		
 		
-		return new UnspecifiedDTO<UnitDTO> (unit.getId(), new UnitDTO( unit.getName(),imageBytes));
+		return new UnspecifiedDTO<UnitDTO> (unit.getId(), new UnitDTO( unit.getName(),imageBytes,unit.getPercentOfCancel()));
 	}
 	
 	private byte[] extractBytes (String ImageName) throws IOException{
