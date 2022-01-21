@@ -21,6 +21,7 @@ import {
   Link,
   Switch
 } from "react-router-dom";
+import ActionReservationPageCottage from './Pages/Cottages/ActionReservationPageCottage';
 
 
 
@@ -49,6 +50,7 @@ function App() {
         <Route  to ="/userComplaint" path ="/userComplaint"  component={ComplaintUserPage}/>
         <Route  to ="/unitComplaint" path ="/unitComplaint"  component={ComplaintUnitPage}/>
         <Route  to ="/actionBoat" path ="/actionBoat"  component={ActionReservationPageBoat}/>
+        <Route  to ="/actionCottage" path ="/actionCottage"  component={ActionReservationPageCottage}/>
         </Switch>
     </Router>
      
