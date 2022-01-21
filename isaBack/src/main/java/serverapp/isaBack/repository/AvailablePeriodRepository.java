@@ -19,4 +19,8 @@ public interface AvailablePeriodRepository extends JpaRepository<AvailablePeriod
 	@Query(value = "SELECT a from AvailablePeriod a WHERE  a.unit.unitType = 'BOAT' AND a.unit.id = ?3 "
 			+ "AND a.startDate <= ?2 AND a.endDate >= ?1 AND a.startDate <= ?1 AND a.endDate >= ?2 ")
 	List<AvailablePeriod> findAvailablePeriodInDateRangeForBoat(Date startDate,Date endDate,UUID boatId);
+	
+	@Query(value = "SELECT a from AvailablePeriod a WHERE  a.unit.unitType = 'COTTAGE' AND a.unit.id = ?3 "
+			+ "AND a.startDate <= ?2 AND a.endDate >= ?1 AND a.startDate <= ?1 AND a.endDate >= ?2 ")
+	List<AvailablePeriod> findAvailablePeriodInDateRangeForCottage(Date startDate,Date endDate,UUID boatId);
 }

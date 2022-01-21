@@ -22,6 +22,7 @@ import serverapp.isaBack.mappers.entities.UnitMapper;
 import serverapp.isaBack.model.AvailablePeriod;
 import serverapp.isaBack.model.Boat;
 import serverapp.isaBack.model.Client;
+import serverapp.isaBack.model.Cottage;
 import serverapp.isaBack.model.OtherTag;
 import serverapp.isaBack.model.Reservation;
 import serverapp.isaBack.model.ReservationStatus;
@@ -32,6 +33,7 @@ import serverapp.isaBack.model.User;
 import serverapp.isaBack.repository.AvailablePeriodRepository;
 import serverapp.isaBack.repository.BoatRepository;
 import serverapp.isaBack.repository.ClientRepository;
+import serverapp.isaBack.repository.CottageRepository;
 import serverapp.isaBack.repository.ReservationRepository;
 import serverapp.isaBack.repository.UnitRepository;
 import serverapp.isaBack.repository.UserRepository;
@@ -60,6 +62,9 @@ public class ReservationService implements IReservationService{
 	
 	@Autowired
 	private BoatRepository boatRepository;
+	
+	@Autowired
+	private CottageRepository ctRepository;
 	
 	@Autowired
 	private UnitRepository  unitRepository;
@@ -226,6 +231,78 @@ public class ReservationService implements IReservationService{
 		
 		if(reservationRepository.findAllReservationsForClientInDataRange(reservation.getStartDateTime(), reservation.getEndDateTime(), reservation.getClient().getId()).size() > 0)
 				throw new IllegalArgumentException("Klijent ima već rezervaciju za brod u izabranom terminu");
+	}
+	
+	
+	@Override	
+	public void makeCottageReservation(NewReservationDTO reservationDTO){
+		
+		Date startDate= new Date(reservationDTO.getStartDateTime());
+		Date endDate= new Date(reservationDTO.getStartDateTime()+24*60*60*1000*reservationDTO.getDays());
+		
+		System.out.println( "startno vreme " + startDate + "   " +  " Krajnje vremee " + endDate);
+		
+	
+		anyBusyCottageReservationInDataRange(reservationDTO,startDate,endDate);
+		
+		Reservation reservation= makeCtReservation(reservationDTO,startDate,endDate);
+		
+		reservationRepository.save(reservation);
+		
+		
+		try {
+			emailService.sendReservationNotification(reservation);
+		} catch (MessagingException e) {}
+	}
+	
+	
+	
+	public void anyBusyCottageReservationInDataRange(NewReservationDTO reservationRequestDTO,Date startDate, Date endDate  ){
+		
+		if(reservationRepository.findAllBusyCtReservationInDataRangeBoat(startDate,endDate,reservationRequestDTO.getUnitId()).size()>0)
+			throw new IllegalArgumentException("Vikendica je zauzeta u tom terminu.");
+		
+		if(!( periodRepository.findAvailablePeriodInDateRangeForCottage(startDate,endDate, reservationRequestDTO.getUnitId()).size()>0))
+			throw new IllegalArgumentException("Vikendica nije dostupan u izabranom terminu");
+		
+	}
+	
+	
+
+	public Reservation makeCtReservation(NewReservationDTO reservationRequestDTO,Date startDate, Date endDate ){
+		
+		UUID clientId = userService.getLoggedUserId();
+		Client client = clientRepository.findById(clientId).get();
+	    Cottage cottage = ctRepository.findById(reservationRequestDTO.getUnitId()).get();
+		User owner = userRepository.findById(cottage.getOwner().getId()).get();
+		Unit unit = unitRepository.findById(cottage.getId()).get();
+		Double price= unit.getPrice()*reservationRequestDTO.getDays();
+		List<OtherTag> servicesList=new ArrayList<OtherTag>();
+		for(OtherTag o:unit.getServices()) {
+			for(UUID tagId : reservationRequestDTO.getListServices()) {
+				if(tagId.equals(o.getId())){
+					servicesList.add(o);
+					price+=o.getPrice();
+				}
+			}
+			
+			
+		}
+		Reservation reservation= new Reservation( owner,unit, startDate, endDate,price,client, ReservationType.COTTAGE, ReservationStatus.RESERVED);
+		
+		isReservationValid(reservation);
+		
+		return reservation;
+		
+	}
+	
+	public void isCtReservationValid(Reservation reservation ){
+		
+		if (!(reservation.getStartDateTime().after(new Date())))
+			throw new IllegalArgumentException("Početni datum ne može biti pre trenutnog.");
+		
+		if(reservationRepository.findAllCtReservationsForClientInDataRange(reservation.getStartDateTime(), reservation.getEndDateTime(), reservation.getClient().getId()).size() > 0)
+				throw new IllegalArgumentException("Klijent ima već rezervaciju za vikendicu u izabranom terminu");
 	}
 	
 	

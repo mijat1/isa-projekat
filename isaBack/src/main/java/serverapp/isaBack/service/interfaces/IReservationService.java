@@ -49,6 +49,8 @@ public interface IReservationService {
 
 	List<Unit> findAllFreeCottages(Date startDate, Date endDate);
 
+	void makeCottageReservation(NewReservationDTO reservationDTO);
+
 	
 
 

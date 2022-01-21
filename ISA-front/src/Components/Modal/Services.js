@@ -51,7 +51,7 @@ class Services extends Component {
         }
       console.log(newReservationDTO)
         Axios
-        .post(API_URL + "/reservation/createBoatReservaton", newReservationDTO, {
+        .post(API_URL + "/reservation/createCottageReservaton", newReservationDTO, {
             validateStatus: () => true,
             headers: { Authorization: GetAuthorisation() },})
         .then((res) =>{
