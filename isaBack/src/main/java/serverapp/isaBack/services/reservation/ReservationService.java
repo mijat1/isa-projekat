@@ -259,7 +259,7 @@ public class ReservationService implements IReservationService{
 	
 	public void anyBusyCottageReservationInDataRange(NewReservationDTO reservationRequestDTO,Date startDate, Date endDate  ){
 		
-		if(reservationRepository.findAllBusyCtReservationInDataRangeBoat(startDate,endDate,reservationRequestDTO.getUnitId()).size()>0)
+		if(reservationRepository.findAllBusyCtReservationInDataRange(startDate,endDate,reservationRequestDTO.getUnitId()).size()>0)
 			throw new IllegalArgumentException("Vikendica je zauzeta u tom terminu.");
 		
 		if(!( periodRepository.findAvailablePeriodInDateRangeForCottage(startDate,endDate, reservationRequestDTO.getUnitId()).size()>0))
@@ -270,10 +270,11 @@ public class ReservationService implements IReservationService{
 	
 
 	public Reservation makeCtReservation(NewReservationDTO reservationRequestDTO,Date startDate, Date endDate ){
-		
+		System.out.println("nj njenj");
 		UUID clientId = userService.getLoggedUserId();
 		Client client = clientRepository.findById(clientId).get();
 	    Cottage cottage = ctRepository.findById(reservationRequestDTO.getUnitId()).get();
+	    System.out.println("userrrrr");
 		User owner = userRepository.findById(cottage.getOwner().getId()).get();
 		Unit unit = unitRepository.findById(cottage.getId()).get();
 		Double price= unit.getPrice()*reservationRequestDTO.getDays();
@@ -290,7 +291,7 @@ public class ReservationService implements IReservationService{
 		}
 		Reservation reservation= new Reservation( owner,unit, startDate, endDate,price,client, ReservationType.COTTAGE, ReservationStatus.RESERVED);
 		
-		isReservationValid(reservation);
+		isCtReservationValid(reservation);
 		
 		return reservation;
 		

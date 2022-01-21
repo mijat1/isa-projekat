@@ -81,7 +81,7 @@ class Header extends React.Component{
 
                     <ReactBootStrap.NavDropdown.Item href="/boatFutureReservation">Brodovi</ReactBootStrap.NavDropdown.Item>
                     <ReactBootStrap.NavDropdown.Divider />
-                    <ReactBootStrap.NavDropdown.Item href="/">Vikendice</ReactBootStrap.NavDropdown.Item>
+                    <ReactBootStrap.NavDropdown.Item href="/cottageFutureReservation">Vikendice</ReactBootStrap.NavDropdown.Item>
                     <ReactBootStrap.NavDropdown.Divider />
                     <ReactBootStrap.NavDropdown.Item href="/">Časovi</ReactBootStrap.NavDropdown.Item>
                     

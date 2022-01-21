@@ -13,6 +13,8 @@ import BoatHistoryReservationsPage from './Pages/Boats/BoatHistoryReservationsPa
 import ComplaintUserPage from './Pages/ComplaintUserPage';
 import ComplaintUnitPage from './Pages/ComplaintUnitPage';
 import ActionReservationPageBoat from './Pages/Boats/ActionReservationPageBoat';
+import CottageFutureReservationsPage from './Pages/Cottages/CottageFutureReservationsPage';
+import CottageHistoryReservationsPage from './Pages/Cottages/CottageHistoryReservationsPage';
 import {
   BrowserRouter as Router,
   Route,
@@ -41,6 +43,8 @@ function App() {
         <Route  to ="/courses" path ="/courses"  component={CoursesPage}/>
         <Route  to ="/boatFutureReservation" path ="/boatFutureReservation"  component={BoatFutureReservationsPage}/>
         <Route  to ="/historyBoatReservation" path ="/historyBoatReservation"  component={BoatHistoryReservationsPage}/>
+        <Route  to ="/cottageFutureReservation" path ="/cottageFutureReservation"  component={CottageFutureReservationsPage}/>
+        <Route  to ="/historyCottageReservation" path ="/historyCottageReservation"  component={CottageHistoryReservationsPage}/>
         <Route  to ="/userProfile" path ="/userProfile"  component={UserProfilePage}/>
         <Route  to ="/userComplaint" path ="/userComplaint"  component={ComplaintUserPage}/>
         <Route  to ="/unitComplaint" path ="/unitComplaint"  component={ComplaintUnitPage}/>

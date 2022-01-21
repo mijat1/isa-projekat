@@ -916,6 +916,7 @@ class CottagesPage extends Component {
 					 description=	{this.state.selectedBoatDescription}
 					 price=	{this.state.selectedBoatPrice}
 					 boatId={this.state.selectedBoat}  
+					 type={"COTTAGE"}
 					  />				
                     <PriceModal show={this.state.openPriceModal} onCloseModal={this.handleModalClose} prices={this.state.services}  header="Cenovnik" />
 				</div>

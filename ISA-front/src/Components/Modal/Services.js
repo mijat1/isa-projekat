@@ -50,6 +50,7 @@ class Services extends Component {
             listServices:this.state.servicesE
         }
       console.log(newReservationDTO)
+      if(this.props.type ==="COTTAGE"){
         Axios
         .post(API_URL + "/reservation/createCottageReservaton", newReservationDTO, {
             validateStatus: () => true,
@@ -66,33 +67,28 @@ class Services extends Component {
             }
         }).catch((err) => {
         });
+    }else   if(this.props.type ==="BOAT"){
+        Axios
+        .post(API_URL + "/reservation/createBoatReservaton", newReservationDTO, {
+            validateStatus: () => true,
+            headers: { Authorization: GetAuthorisation() },})
+        .then((res) =>{
+            console.log(res.status)
+            if (res.status === 201) {
+                alert("Uspešno izvršena rezervacija.");
+                this.handleClickOnClose();
+            }else if (res.status === 400) {
+                alert(res.data);
+            }else{
+                alert("Serverska Greška!");
+            }
+        }).catch((err) => {
+        });
     }
 
-    isValidData = (addDrugToPharmacyDTO) =>{
-        if(addDrugToPharmacyDTO.drugId===''){
-            return false
-        }
-
-        if(addDrugToPharmacyDTO.dateTo===new Date()){
-            return false
-        }
-
-        if(addDrugToPharmacyDTO.amount<1){
-            return false
-        }
-
-        if(addDrugToPharmacyDTO.price<1){
-            return false
-        }
-
-        return true
-    }
-
- 
+}
 
 
-
-  
 
     handleClickOnClose = () => {
         this.setState({

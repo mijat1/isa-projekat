@@ -23,7 +23,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID>{
 	
 	@Query(value = "SELECT r FROM Reservation r WHERE r.reservationType = 'COTTAGE' AND r.reservationStatus = 'RESERVED' "
 			+ " AND r.unit.id = ?3  AND NOT (r.startDateTime >= ?2 OR r.endDateTime <= ?1) ")
-	List<Reservation> findAllBusyCtReservationInDataRangeBoat(Date startDate, Date endDate,UUID boatId);
+	List<Reservation> findAllBusyCtReservationInDataRange(Date startDate, Date endDate,UUID boatId);
 	
 	@Query(value = "SELECT r FROM Reservation r WHERE r.reservationType = 'BOAT' AND r.reservationStatus = 'RESERVED'"
 			+ " AND r.client.id = ?3 AND NOT (r.startDateTime >= ?2 OR r.endDateTime <= ?1) ")
