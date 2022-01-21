@@ -27,6 +27,7 @@ import serverapp.isaBack.model.Reservation;
 import serverapp.isaBack.model.ReservationStatus;
 import serverapp.isaBack.model.ReservationType;
 import serverapp.isaBack.model.Unit;
+import serverapp.isaBack.model.UnitType;
 import serverapp.isaBack.model.User;
 import serverapp.isaBack.repository.AvailablePeriodRepository;
 import serverapp.isaBack.repository.BoatRepository;
@@ -74,9 +75,24 @@ public class ReservationService implements IReservationService{
 		
 		List<AvailablePeriod> availablePeriodInDateRange= new ArrayList<AvailablePeriod>();
 		
-		availablePeriodInDateRange= periodRepository.findAvailablePeriodInDateRange(startDate,endDate, startDate.getHours(), endDate.getHours());
+		availablePeriodInDateRange= periodRepository.findAvailablePeriodInDateRange(startDate,endDate, UnitType.BOAT);
 				
-		List<Reservation> busyReservationsInDataRange= reservationRepository.findAllreservationsInDataRange(startDate,endDate);
+		List<Reservation> busyReservationsInDataRange= reservationRepository.findAllreservationsInDataRange(startDate,endDate,ReservationType.BOAT);
+					
+		List<Unit> boatsFree= findBoatsWithFreePeroid(availablePeriodInDateRange,busyReservationsInDataRange);
+		
+				
+		return boatsFree;
+	}
+	
+	@Override	
+	public List<Unit> findAllFreeCottages(Date startDate, Date endDate) {
+		
+		List<AvailablePeriod> availablePeriodInDateRange= new ArrayList<AvailablePeriod>();
+		
+		availablePeriodInDateRange= periodRepository.findAvailablePeriodInDateRange(startDate,endDate,UnitType.COTTAGE);
+				
+		List<Reservation> busyReservationsInDataRange= reservationRepository.findAllreservationsInDataRange(startDate,endDate,ReservationType.COTTAGE);
 					
 		List<Unit> pharmacyWithFreeConsulations= findBoatsWithFreePeroid(availablePeriodInDateRange,busyReservationsInDataRange);
 		
@@ -176,7 +192,7 @@ public class ReservationService implements IReservationService{
 	
 	
 
-	public Reservation makeReservation(NewReservationDTO reservationRequestDTO,Date startDate, Date endDate  ){
+	public Reservation makeReservation(NewReservationDTO reservationRequestDTO,Date startDate, Date endDate ){
 		
 		UUID clientId = userService.getLoggedUserId();
 		Client client = clientRepository.findById(clientId).get();

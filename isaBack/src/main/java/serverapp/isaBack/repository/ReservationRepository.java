@@ -13,9 +13,9 @@ import serverapp.isaBack.model.ReservationType;
 
 public interface ReservationRepository extends JpaRepository<Reservation, UUID>{
 	
-	@Query(value = "SELECT r FROM Reservation r WHERE r.reservationType = 'BOAT' AND r.reservationStatus = 'RESERVED' "
+	@Query(value = "SELECT r FROM Reservation r WHERE r.reservationType = ?3 AND r.reservationStatus = 'RESERVED' "
 			+ " AND NOT (r.startDateTime >= ?2 OR r.endDateTime <= ?1) ")
-	List<Reservation> findAllreservationsInDataRange(Date startDate, Date endDate);
+	List<Reservation> findAllreservationsInDataRange(Date startDate, Date endDate,ReservationType reservationType);
 	
 	@Query(value = "SELECT r FROM Reservation r WHERE r.reservationType = 'BOAT' AND r.reservationStatus = 'RESERVED' "
 			+ " AND r.unit.id = ?3  AND NOT (r.startDateTime >= ?2 OR r.endDateTime <= ?1) ")

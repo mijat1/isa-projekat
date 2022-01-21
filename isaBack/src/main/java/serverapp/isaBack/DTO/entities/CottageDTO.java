@@ -17,8 +17,10 @@ public class CottageDTO {
 	
 	private double avgGrade;
 	
+	private double price;
+	
 	public CottageDTO(String name, String address, String description, byte[] image,
-			List<UnspecifiedDTO<OtherTagDTO>> services, double avgGrade) {
+			List<UnspecifiedDTO<OtherTagDTO>> services, double avgGrade,double price) {
 		super();
 		this.name = name;
 		this.address = address;
@@ -26,6 +28,7 @@ public class CottageDTO {
 		this.image = image;
 		this.setServices(services);
 		this.avgGrade = avgGrade;
+		this.price=price;
 	}
 
 
@@ -85,5 +88,17 @@ public class CottageDTO {
 	public void setServices(List<UnspecifiedDTO<OtherTagDTO>> services) {
 		this.services = services;
 	}
+
+
+	public double getPrice() {
+		return price;
+	}
+
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	
+	
 	
 }

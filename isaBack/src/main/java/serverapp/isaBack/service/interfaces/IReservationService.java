@@ -47,6 +47,8 @@ public interface IReservationService {
 
 	void fastReservation(UUID reservationId);
 
+	List<Unit> findAllFreeCottages(Date startDate, Date endDate);
+
 	
 
 
