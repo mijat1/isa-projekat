@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import serverapp.isaBack.DTO.users.ComplaintUnitDTO;
@@ -30,16 +31,13 @@ public class ComplaintController {
 	@Autowired
 	private IComplaintService complaintService;
 	
-	/*@Autowired
-	private IAppointmentService appointmentService;*/
+
 	
-	
-	
-	//@PreAuthorize("hasRole('PATIENT')")
+	@PreAuthorize("hasRole('CLIENT')")
 	@PostMapping("/user")
 	public ResponseEntity<UUID> createComplaintUser(@RequestBody ComplaintUserDTO complaintUserDTO) {
 		System.out.println("usao u zalbu");
-	//	System.out.println(ComplaintUserDTO.getStaffName());
+	
 		
 		try {
 			return new ResponseEntity<UUID>(complaintService.createComplaintUser(complaintUserDTO),HttpStatus.CREATED);
@@ -49,15 +47,10 @@ public class ComplaintController {
 		}
 	}
 	
-	//@PreAuthorize("hasRole('PATIENT')")
+	@PreAuthorize("hasRole('CLIENT')")
 	@PostMapping("/unit")
 	public ResponseEntity<UUID> createComplaintUnit(@RequestBody ComplaintUnitDTO complaintUnitDTO) {
 		System.out.println("usao u zalbe entiteta");
-	//	System.out.println(appointmentService.canPatientReportPharmacy(complaintPharmacyDTO.getPharmacyId()));
-		//if(!appointmentService.canPatientReportPharmacy(complaintPharmacyDTO.getPharmacyId())) {
-		//	return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-		//}
-		
 		try {
 			return new ResponseEntity<UUID>(complaintService.createComplaintUnit(complaintUnitDTO),HttpStatus.CREATED);
 		
@@ -94,8 +87,34 @@ public class ComplaintController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 	
- 
+	@PreAuthorize("hasRole('SYSADMIN')")
+	@PostMapping("/replyToUserComplaint")
+	public ResponseEntity<UUID> replyToUserComplaint(@RequestBody ComplaintUserDTO complaintUserDTO) {
+		System.out.println("usao u reply complaints user");
+		
+		
+		try {
+			return new ResponseEntity<>(complaintService.replyToUserComplaint(complaintUserDTO.getOwnerId(),complaintUserDTO.getReply(),complaintUserDTO.getReplyToUser()),HttpStatus.CREATED);
+		
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	//@PreAuthorize("hasRole('SYSADMIN')")
+	@PostMapping("/replyToUnitComplaint")
+	public ResponseEntity<UUID> replyToUnitComplaint(@RequestBody ComplaintUnitDTO complaintUnitDTO) {
+		System.out.println("usao u reply hihihi");
+		try {
+			return new ResponseEntity<>(complaintService.replyToUnitComplaint(complaintUnitDTO.getUnitId(),complaintUnitDTO.getReply(),complaintUnitDTO.getReplyToUser()),HttpStatus.CREATED);
+		
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	
 	
 

@@ -17,6 +17,10 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import serverapp.isaBack.model.Client;
+import serverapp.isaBack.model.ComplaintUnit;
+import serverapp.isaBack.model.ComplaintUser;
+import serverapp.isaBack.model.Reservation;
+import serverapp.isaBack.model.User;
 
 
 @Service
@@ -45,11 +49,139 @@ public class EmailService {
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 		String htmlMsg = "<p>Hello " + client.getName() + ",</p>" +
-					"<p>You registered an account on Health Clinic, before being able to use your account you need to verify that this is your email address by clicking here:</p>"
-					+ "<a href=\"" + url + "\">Verify your account</a>.</p>" + "<p>Health Clinic</p>"; 
+					"<p>Registrovali ste se na sajt doživi avanturu, pre korišćenja morate aktivirati svoj nalog ovde:</p>"
+					+ "<a href=\"" + url + "\">potvrdi nalog</a>.</p>" + "<p>Admin sajta</p>"; 
 		helper.setText(htmlMsg, true);
 		helper.setTo("acamijatovic.98@gmail.com");
-		helper.setSubject("Activate account");
+		helper.setSubject("Aktivacija naloga");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		System.out.println("usao 2");
+		javaMailSender.send(mimeMessage);
+		
+	}
+	
+	@Async
+	public void sendReservationNotification(Reservation reservation) throws MessagingException {
+		
+		DateFormat formatterForTime = new SimpleDateFormat("HH:mm");
+		DateFormat mainFormatter = new SimpleDateFormat("dd-MM-yyyy");
+		
+		
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+		String htmlMsg = "<p>Pozdrev " + reservation.getClient().toString() + ",</p>" + 
+		             "<p> Uspešno ste rezervisali : " + reservation.getUnit().getName() + " kod vlasnika "
+						+ reservation.getOwner().toString() + 
+						", za period od: " + mainFormatter.format(reservation.getStartDateTime()) + " " + formatterForTime.format(reservation.getStartDateTime()) + " do: "
+						+mainFormatter.format(reservation.getEndDateTime()) + " " + formatterForTime.format(reservation.getEndDateTime()) +
+						"</p> <p> Ukupna cena je: "+ reservation.getPrice()+
+						"</p> <p>Admin sistema</p>";
+
+		helper.setText(htmlMsg, true);
+		//helper.setTo(reservation.getClient().getEmail());
+		helper.setTo("acamijatovic.98@gmail.com");
+		helper.setSubject("Rezervacija");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		javaMailSender.send(mimeMessage);
+		
+	}
+	
+	
+	@Async
+	public void sendEmailforReplyedComplaint(ComplaintUnit complaintUnit)
+			throws MailException, InterruptedException, MessagingException {
+		
+		
+		System.out.println("usao u odgovor");
+		
+		
+		
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+		String htmlMsg = "<p>Pozdrav " + complaintUnit.getClient().getName() + ",</p>" +
+					"<p>Ovde je naš odgovor na vašu žalbu: " + complaintUnit.getText()+ "</p>"
+					+ "<p>" + complaintUnit.getReply()+ "</p>" + "<p>Admin sistema</p>"; 
+		helper.setText(htmlMsg, true);
+		//helper.setTo(complaintUnit.getClient().getEmail());
+		helper.setTo("acamijatovic.98@gmail.com");
+		System.out.println("Ejaasjdasjdas");
+		helper.setSubject("Odgovor na žalbu");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		System.out.println("usao 2");
+		javaMailSender.send(mimeMessage);
+		
+	}
+	
+	@Async
+	public void sendEmailforReplyedComplaintToOwner(ComplaintUnit complaintUnit)
+			throws MailException, InterruptedException, MessagingException {
+		
+		
+		System.out.println("usao u odgovor");
+		
+		
+		
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+		String htmlMsg = "<p>Pozdrav " + ",</p>" +
+					"<p>Imate žalbu za : " +complaintUnit.getUnitName() +" " + complaintUnit.getText()+ "</p>"
+					+ "<p>Naš odgovor je: " + complaintUnit.getReplyToUser()+ "</p>" + "<p>Admin sistema</p>"; 
+		helper.setText(htmlMsg, true);
+		//helper.setTo(complaintUnit.getUserEmail());
+		helper.setTo("acamijatovic.98@gmail.com");
+		System.out.println("Ejaasjdasjdas");
+		helper.setSubject("Odgovor na žalbu");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		System.out.println("usao 2");
+		javaMailSender.send(mimeMessage);
+		
+	}
+	
+	
+	@Async
+	public void sendEmailforReplyedComplaint(ComplaintUser complaintUnit)
+			throws MailException, InterruptedException, MessagingException {
+		
+		
+		System.out.println("usao u odgovor");
+		
+		
+		
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+		String htmlMsg = "<p>Pozdrav " + complaintUnit.getClient().getName() + ",</p>" +
+					"<p>Ovde je naš odgovor na vašu žalbu: " + complaintUnit.getText()+ "</p>"
+					+ "<p>" + complaintUnit.getReply()+ "</p>" + "<p>Admin sistema</p>"; 
+		helper.setText(htmlMsg, true);
+		//helper.setTo(complaintUnit.getClient().getEmail());
+		helper.setTo("acamijatovic.98@gmail.com");
+		System.out.println("Ejaasjdasjdas");
+		helper.setSubject("Odgovor na žalbu");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		System.out.println("usao 2");
+		javaMailSender.send(mimeMessage);
+		
+	}
+	
+	@Async
+	public void sendEmailforReplyedComplaintToOwner(ComplaintUser complaintUnit)
+			throws MailException, InterruptedException, MessagingException {
+		
+		
+		System.out.println("usao u odgovor");
+		
+		
+		
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+		String htmlMsg = "<p>Pozdrav " +complaintUnit.getUserName()+ ",</p>" +
+					"<p>Imate žalbu : "  +" " + complaintUnit.getText()+ "</p>"
+					+ "<p>Naš odgovor je: " + complaintUnit.getReplyToUser()+ "</p>" + "<p>Admin sistema</p>"; 
+		helper.setText(htmlMsg, true);
+		//helper.setTo(complaintUnit.getUserEmail());
+		helper.setTo("acamijatovic.98@gmail.com");
+		System.out.println("Ejaasjdasjdas");
+		helper.setSubject("Odgovor na žalbu");
 		helper.setFrom(env.getProperty("spring.mail.username"));
 		System.out.println("usao 2");
 		javaMailSender.send(mimeMessage);

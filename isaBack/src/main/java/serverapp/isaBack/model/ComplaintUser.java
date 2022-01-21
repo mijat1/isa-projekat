@@ -28,6 +28,9 @@ public class ComplaintUser {
 	@Column(name="reply")
 	private String reply;
 	
+	@Column(name="ureply")
+	private String replyToUser;
+	
 	@Column(name="email")
 	private String email;
 	
@@ -146,6 +149,14 @@ public class ComplaintUser {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getReplyToUser() {
+		return replyToUser;
+	}
+
+	public void setReplyToUser(String replyToUser) {
+		this.replyToUser = replyToUser;
 	}
 
 	

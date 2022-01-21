@@ -12,6 +12,8 @@ public class ComplaintUserDTO {
     
 	private String text;
 
+	private String clientName;
+	
 	private String userName;
 
 	private String profession;
@@ -20,15 +22,16 @@ public class ComplaintUserDTO {
 	
 	private String email;
 	
-	
+	private String replyToUser;
 
 	public ComplaintUserDTO() {}
 		
-	public ComplaintUserDTO(UUID ownerId, Date date, String text, String name, String profession, String reply, String email) {
+	public ComplaintUserDTO(UUID ownerId, Date date, String text, String name,String clientName, String profession, String reply, String email) {
 		this.ownerId= ownerId;
 		this.date=date;
 		this.text=text;
 		this.userName=name;
+		this.clientName=clientName;
 		this.profession = profession;
 		this.reply = reply;
 		this.email = email;
@@ -88,6 +91,22 @@ public class ComplaintUserDTO {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
+	public String getReplyToUser() {
+		return replyToUser;
+	}
+
+	public void setReplyToUser(String replyToUser) {
+		this.replyToUser = replyToUser;
 	}
 
 

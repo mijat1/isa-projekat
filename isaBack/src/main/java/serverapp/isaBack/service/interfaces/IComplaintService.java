@@ -12,6 +12,8 @@ public interface IComplaintService {
 	public UUID createComplaintUnit(ComplaintUnitDTO entityDTO);
 	public List<UnspecifiedDTO<ComplaintUserDTO>> findAllUserComplaints();
 	public List<UnspecifiedDTO<ComplaintUnitDTO>> findAllUnitComplaints();
+	public UUID replyToUnitComplaint(UUID complaintId,String reply,String replyToUser);
+	public UUID replyToUserComplaint(UUID complaintId,String reply,String replyToUser);
 
 	
 }

@@ -26,6 +26,7 @@ import serverapp.isaBack.model.ReservationType;
 import serverapp.isaBack.service.interfaces.IBoatService;
 import serverapp.isaBack.service.interfaces.ICourseService;
 import serverapp.isaBack.service.interfaces.IReservationService;
+import serverapp.isaBack.service.users.EmailService;
 import serverapp.isaBack.unspecifiedDTO.UnspecifiedDTO;
 
 @RestController
@@ -53,6 +54,8 @@ public class ReservationController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}	
+		
+		
 	}
 	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")

@@ -35,6 +35,7 @@ import serverapp.isaBack.repository.UnitRepository;
 import serverapp.isaBack.repository.UserRepository;
 import serverapp.isaBack.service.interfaces.IReservationService;
 import serverapp.isaBack.service.interfaces.IUserService;
+import serverapp.isaBack.service.users.EmailService;
 import serverapp.isaBack.unspecifiedDTO.UnspecifiedDTO;
 
 @Service
@@ -60,6 +61,9 @@ public class ReservationService implements IReservationService{
 	
 	@Autowired
 	private UnitRepository  unitRepository;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	private UnitMapper unitMapper= new UnitMapper();
 	private ReservationMapper resMapper= new ReservationMapper();
@@ -152,11 +156,9 @@ public class ReservationService implements IReservationService{
 		reservationRepository.save(reservation);
 		
 		
-		/*try {
-			//emailService.sendConsultationAppointmentReservationNotification(appointment);
+		try {
+			emailService.sendReservationNotification(reservation);
 		} catch (MessagingException e) {}
-		
-		*/
 	}
 	
 	

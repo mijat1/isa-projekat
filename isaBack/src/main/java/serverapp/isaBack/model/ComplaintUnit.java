@@ -28,8 +28,14 @@ public class ComplaintUnit {
 	@Column(name="reply")
 	private String reply;
 	
+	@Column(name="ureply")
+	private String replyToUser;
+	
 	@Column(name="email")
 	private String email;
+	
+	@Column(name="uemail")
+	private String userEmail;
 	
 	@Column(name="active")
 	private boolean active;
@@ -39,17 +45,18 @@ public class ComplaintUnit {
 	
 	public ComplaintUnit() {}
 	
-	public ComplaintUnit(Unit unit, Client client, String text,String unitName,String email) {
-		this(UUID.randomUUID(), unit, "", client, text,unitName,email, new Date());
+	public ComplaintUnit(Unit unit, Client client, String text,String unitName,String email,String userEmail) {
+		this(UUID.randomUUID(), unit, "", client, text,unitName,email,userEmail, new Date());
 	}
 	
-	public ComplaintUnit(UUID id,Unit unit, String reply, Client client,String text,String unitName,String email, Date date) {
+	public ComplaintUnit(UUID id,Unit unit, String reply, Client client,String text,String unitName,String email,String userEmail, Date date) {
 		super();
 		this.id = id;
 		this.complaintUnitId = new ComplaintUnitId(unit, client);
 		this.date=date;
 		this.unitName=unitName;
 		this.email=email;
+		this.userEmail=userEmail;
 		this.text=text;
 		this.reply = reply;
 		this.active = true;
@@ -137,5 +144,22 @@ public class ComplaintUnit {
 		this.unitName = unitName;
 	}
 
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+
+	public String getReplyToUser() {
+		return replyToUser;
+	}
+
+	public void setReplyToUser(String replyToUser) {
+		this.replyToUser = replyToUser;
+	}
+
+	
 	
 }
