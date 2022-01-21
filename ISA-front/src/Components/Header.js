@@ -87,6 +87,14 @@ class Header extends React.Component{
                     
                 </ReactBootStrap.NavDropdown>
                   
+                <ReactBootStrap.NavDropdown alignRight title="Žalbe" id="collasible-nav-dropdown" hidden={!this.hasRole("ROLE_SYSADMIN")} >
+
+                    <ReactBootStrap.NavDropdown.Item href="/userComplaint">Vlasnici i instruktori</ReactBootStrap.NavDropdown.Item>
+                    <ReactBootStrap.NavDropdown.Divider />
+                    <ReactBootStrap.NavDropdown.Item href="/unitComplaint">Entiteti</ReactBootStrap.NavDropdown.Item>
+              
+
+</ReactBootStrap.NavDropdown>
                 <ReactBootStrap.NavDropdown alignRight title="Korisnik" id="collasible-nav-dropdown">
                     <ReactBootStrap.NavDropdown.Item href="/login" hidden={this.IsLogedIn()}>Prijava</ReactBootStrap.NavDropdown.Item>
                     <ReactBootStrap.NavDropdown.Divider hidden={this.IsLogedIn()} />

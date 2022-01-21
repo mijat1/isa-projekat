@@ -37,12 +37,6 @@ class BoatsPage extends Component {
 		price: 0,
 		startDate:new Date(),
 		endDate:new Date(),
-		hiddenSuccessfulAlert: true,
-		successfulHeader: "",
-		successfulMessage: "",
-		hiddenUnsuccessfulAlert: true,
-		unsuccessfulHeader: "",
-		unsuccessfulMessage: "",
 		showSearchForm:false,
 		showingSearched:false,
 		openPriceModal:false,
@@ -657,7 +651,7 @@ class BoatsPage extends Component {
 					<div style={{ width: "70%", marginTop: "3em", marginLeft: "auto", marginRight: "auto" }} width="100%">
 
 
-					<button className="btn btn-primary " type="button" onClick={this.handleFormShow}>
+					<button className="btn btn-primary " type="button" onClick={this.handleFormShow} hidden={!this.hasRole("ROLE_CLIENT")}>
                         {this.state.showSearchForm ? "Zatvori pretragu" : "Otvori pretragu"}
                     </button>
 
@@ -669,7 +663,7 @@ class BoatsPage extends Component {
 
 						<button className="btn btn-outline-primary pull-right" type="button" onClick={this.handleFormShow}>
                              Akcije
-                    </button>
+                      </button>
 						
 						<form className={this.state.showSearchForm ? "form-inline mt-3" : "form-inline mt-3 collapse"} width="100%" id="formCollapse">
 						<div className="form-row justify-content-center">

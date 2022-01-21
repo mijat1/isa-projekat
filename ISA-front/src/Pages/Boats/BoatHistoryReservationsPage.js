@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Axios from "axios";
 import Header from '../../Components/Header';
 import GetAuthorisation from "../../Funciton/GetAuthorisation";
+import ComplaintModal from "../../Components/Modal/ComplaintModal";
 
 
 import {NavLink, Redirect } from "react-router-dom";
@@ -21,11 +22,15 @@ class BoatHistoryReservationsPage extends Component {
 		showComplaintModal: false,
 		
 		complaint: "",
-		unit:"",
+		selectedUnitId:"",
         profession:"",
 		Date : new Date(),
 		text : "",
-		
+        textUnit : "",
+        unitName:"",
+        selectedOwnerId: "",
+        showComplaintModal1 : false,
+        ownerName : ""
 
     };
 
@@ -225,23 +230,104 @@ class BoatHistoryReservationsPage extends Component {
         
     }
 
-	handleComplaintClick = (staff) => {
-		console.log(staff);
+	handleComplaintClick = (unit) => {
+		console.log(unit);
 		
 				
 					this.setState({
-						selectedStaffId: staff.Id,
+						selectedUnitId: unit.Id,
 						showComplaintModal: true,
-						StaffName: staff.EntityDTO.name,
-						StaffSurame: staff.EntityDTO.surname,
-						profession : staff.EntityDTO.profession,
-						grade: 0,
+                        unitName : unit.EntityDTO.name
 					});
 				
 			
 			
 	};
 
+
+    handleComaplaint = () => {
+		let ComplaintUnitDTO = {
+			unitId: this.state.selectedUnitId,
+			date: new Date(),
+			text: this.state.textUnit,
+			unitName: "",
+			reply: "",
+			email: "",
+		};
+
+		Axios.post(API_URL+"/complaint/unit", ComplaintUnitDTO, { validateStatus: () => true, headers: { Authorization: GetAuthorisation() } })
+			.then((resp) => {
+				if (resp.status === 500) {
+					this.setState({ hiddenFailAlert: false, failHeader: "Internal server error", failMessage: "Server error." });
+				} else if (resp.status === 201) {
+					
+					
+				}
+				this.setState({ showComplaintModal: false });
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	handleComplaintChange = (event) => {
+		this.setState({ textUnit: event.target.value });
+	};
+
+	
+	handleComplaintModalClose = () => {
+		this.setState({ showComplaintModal: false });
+	};
+
+
+    handleComplaintClickOwner = (owner) => {
+		console.log(owner);
+		
+				
+					this.setState({
+						selectedOwnerId: owner.Id,
+						showComplaintModal1: true,
+                        ownerName : owner.EntityDTO.name
+					});
+				
+			
+			
+	};
+
+    handleComaplaintOwner = () => {
+		let ComplaintUserDTO = {
+			ownerId: this.state.selectedOwnerId,
+			date: new Date(),
+			text: this.state.text,
+			userName:"",
+			profession: "",
+			reply: "",
+			email: "",
+		};
+
+		Axios.post(API_URL +"/complaint/user", ComplaintUserDTO, { validateStatus: () => true, headers: { Authorization: GetAuthorisation() } })
+			.then((resp) => {
+				if (resp.status === 500) {
+					this.setState({ hiddenFailAlert: false, failHeader: "Internal server error", failMessage: "Server error." });
+				} else if (resp.status === 201) {
+					
+					
+				}
+				this.setState({ showComplaintModal: false });
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	handleComplaintChange1 = (event) => {
+		this.setState({ text: event.target.value });
+	};
+
+	
+	handleComplaintModalClose1 = () => {
+		this.setState({ showComplaintModal1: false });
+	};
 
 
 
@@ -354,7 +440,7 @@ class BoatHistoryReservationsPage extends Component {
 										<div style={{ marginLeft: "55%" }}>
 										<button
 											type="button"
-											onClick={() => this.handleComplaintClick(reservation.EntityDTO.employee)}
+											onClick={() => this.handleComplaintClick(reservation.EntityDTO.unit)}
 											
 											className="btn btn-outline-secondary"
 										>
@@ -365,7 +451,7 @@ class BoatHistoryReservationsPage extends Component {
 										<div style={{ marginLeft: "55%",marginTop: "1em"  }}>
 										<button
 											type="button"
-											onClick={() => this.handleGetGradeClick(reservation.EntityDTO.employee)}
+											onClick={() => this.handleComplaintClickOwner(reservation.EntityDTO.user)}
 											
 											className="btn btn-outline-secondary"
 										>
@@ -392,7 +478,25 @@ class BoatHistoryReservationsPage extends Component {
         </div>
 
 
+                <ComplaintModal
+					buttonName="Pošalji"
+					header="Napiši žalbu"
+					handleComplaintChange={this.handleComplaintChange}
+					show={this.state.showComplaintModal}
+					onCloseModal={this.handleComplaintModalClose}
+					giveFeedback={this.handleComaplaint}
+					name={this.state.unitName}
+				/>
 
+              <ComplaintModal
+					buttonName="Pošalji"
+					header="Napiši žalbu"
+					handleComplaintChange={this.handleComplaintChange1}
+					show={this.state.showComplaintModal1}
+					onCloseModal={this.handleComplaintModalClose1}
+					giveFeedback={this.handleComaplaintOwner}
+					name={"vlasnika broda " + this.state.ownerName}
+				/>
 
 
 

@@ -10,6 +10,8 @@ import CoursesPage from './Pages/Courses/CoursesPage';
 import UserProfilePage from "./Pages/UserProfile";
 import BoatFutureReservationsPage from './Pages/Boats/BoatFutureReservationsPage'
 import BoatHistoryReservationsPage from './Pages/Boats/BoatHistoryReservationsPage'
+import ComplaintUserPage from './Pages/ComplaintUserPage';
+import ComplaintUnitPage from './Pages/ComplaintUnitPage';
 import {
   BrowserRouter as Router,
   Route,
@@ -39,6 +41,8 @@ function App() {
         <Route  to ="/boatFutureReservation" path ="/boatFutureReservation"  component={BoatFutureReservationsPage}/>
         <Route  to ="/historyBoatReservation" path ="/historyBoatReservation"  component={BoatHistoryReservationsPage}/>
         <Route  to ="/userProfile" path ="/userProfile"  component={UserProfilePage}/>
+        <Route  to ="/userComplaint" path ="/userComplaint"  component={ComplaintUserPage}/>
+        <Route  to ="/unitComplaint" path ="/unitComplaint"  component={ComplaintUnitPage}/>
         </Switch>
     </Router>
      
