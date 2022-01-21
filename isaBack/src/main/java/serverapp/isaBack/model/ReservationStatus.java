@@ -1,7 +1,7 @@
 package serverapp.isaBack.model;
 
 public enum ReservationStatus {
-	FREE,
+	ACTION,
 	RESERVED,
 	FINISHED,
 	CANCELED

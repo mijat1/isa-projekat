@@ -20,19 +20,22 @@ public class ReservationDTO {
 	    private Date endDateTime;
 		    
 	    private double price;
+	    
+	    private double actionPrice;
 
 		public ReservationDTO() {
 			super();
 		}
 
 		public ReservationDTO( UnspecifiedDTO<UnitDTO> unit,UnspecifiedDTO<UserNameDTO> user, Date startDateTime, Date endDateTime,
-				double price) {
+				double price,double actionPrice) {
 			super();
 			this.unit=unit;
 			this.user=user;
 			this.startDateTime = startDateTime;
 			this.endDateTime = endDateTime;
 			this.price = price;
+			this.actionPrice = actionPrice;
 		}
 
 	
@@ -75,6 +78,14 @@ public class ReservationDTO {
 
 		public void setPrice(double price) {
 			this.price = price;
+		}
+
+		public double getActionPrice() {
+			return actionPrice;
+		}
+
+		public void setActionPrice(double actionPrice) {
+			this.actionPrice = actionPrice;
 		}
 	    
 }

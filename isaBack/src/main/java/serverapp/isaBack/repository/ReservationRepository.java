@@ -32,6 +32,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID>{
 	
 
 	@Query(value = "SELECT r FROM Reservation r WHERE (r.client.id = ?1 AND r.reservationStatus = 'FINISHED'"   
-			+ "  AND r.reservationType = ?2) OR ( r.client.id = ?1  AND r.reservationType = ?2 AND r.startDateTime < CURRENT_TIMESTAMP) ")
-	List<Reservation> findAllHistoryClientsReservation(UUID userId, ReservationType reservationType);  
+			+ "  AND r.reservationType = ?2) OR ( r.client.id = ?1 AND r.reservationType = ?2 AND r.startDateTime < CURRENT_TIMESTAMP) ")
+	List<Reservation> findAllHistoryClientsReservation(UUID userId, ReservationType reservationType);
+
+	@Query(value = "SELECT r FROM Reservation r WHERE r.reservationStatus = 'ACTION' AND r.reservationType = ?1 ")
+	List<Reservation> findAllActionReservation(ReservationType reservationType);
 }

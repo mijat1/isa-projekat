@@ -39,7 +39,7 @@ public class ReservationMapper {
 	public UnspecifiedDTO<ReservationDTO> MapReservationToDTOs(Reservation reservation,UnspecifiedDTO<UnitDTO> unit,UnspecifiedDTO<UserNameDTO> owner){
 		
 		return new UnspecifiedDTO<ReservationDTO>(reservation.getId(), 
-				new ReservationDTO(unit,owner,reservation.getStartDateTime(),reservation.getEndDateTime(),reservation.getPrice()));
+				new ReservationDTO(unit,owner,reservation.getStartDateTime(),reservation.getEndDateTime(),reservation.getPrice(),reservation.getActionPrice()));
 		
 	}
 	

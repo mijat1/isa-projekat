@@ -12,6 +12,7 @@ import BoatFutureReservationsPage from './Pages/Boats/BoatFutureReservationsPage
 import BoatHistoryReservationsPage from './Pages/Boats/BoatHistoryReservationsPage'
 import ComplaintUserPage from './Pages/ComplaintUserPage';
 import ComplaintUnitPage from './Pages/ComplaintUnitPage';
+import ActionReservationPageBoat from './Pages/Boats/ActionReservationPageBoat';
 import {
   BrowserRouter as Router,
   Route,
@@ -29,7 +30,7 @@ function App() {
     
     
     <Router>
-      
+    
         <Switch>
         <Route exact to ="/"  path ="/" component={HomePage}/>
         <Route  to ="/login" path ="/login"  component={LoginPage}/>
@@ -43,6 +44,7 @@ function App() {
         <Route  to ="/userProfile" path ="/userProfile"  component={UserProfilePage}/>
         <Route  to ="/userComplaint" path ="/userComplaint"  component={ComplaintUserPage}/>
         <Route  to ="/unitComplaint" path ="/unitComplaint"  component={ComplaintUnitPage}/>
+        <Route  to ="/actionBoat" path ="/actionBoat"  component={ActionReservationPageBoat}/>
         </Switch>
     </Router>
      

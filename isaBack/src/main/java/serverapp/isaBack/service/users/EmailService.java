@@ -69,14 +69,25 @@ public class EmailService {
 		
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-		String htmlMsg = "<p>Pozdrev " + reservation.getClient().toString() + ",</p>" + 
-		             "<p> Uspešno ste rezervisali : " + reservation.getUnit().getName() + " kod vlasnika "
+		String htmlMsg="";
+		if(reservation.getActionPrice()>0) {
+		 htmlMsg = "<p>Pozdrav " + reservation.getClient().toString() + ",</p>" + 
+		             "<p> Uspešno ste rezervisali : " + reservation.getUnit().getName() + "na akciji kod vlasnika "
 						+ reservation.getOwner().toString() + 
 						", za period od: " + mainFormatter.format(reservation.getStartDateTime()) + " " + formatterForTime.format(reservation.getStartDateTime()) + " do: "
 						+mainFormatter.format(reservation.getEndDateTime()) + " " + formatterForTime.format(reservation.getEndDateTime()) +
 						"</p> <p> Ukupna cena je: "+ reservation.getPrice()+
+						"</p> <p> Cena na akciji je: "+ reservation.getActionPrice()+
 						"</p> <p>Admin sistema</p>";
-
+		}else {
+		 htmlMsg = "<p>Pozdrav " + reservation.getClient().toString() + ",</p>" + 
+	             "<p> Uspešno ste rezervisali : " + reservation.getUnit().getName() + " kod vlasnika "
+					+ reservation.getOwner().toString() + 
+					", za period od: " + mainFormatter.format(reservation.getStartDateTime()) + " " + formatterForTime.format(reservation.getStartDateTime()) + " do: "
+					+mainFormatter.format(reservation.getEndDateTime()) + " " + formatterForTime.format(reservation.getEndDateTime()) +
+					"</p> <p> Ukupna cena je: "+ reservation.getPrice()+
+					"</p> <p>Admin sistema</p>";
+		}
 		helper.setText(htmlMsg, true);
 		//helper.setTo(reservation.getClient().getEmail());
 		helper.setTo("acamijatovic.98@gmail.com");

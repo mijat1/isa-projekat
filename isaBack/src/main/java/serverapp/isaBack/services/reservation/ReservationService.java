@@ -236,6 +236,29 @@ public class ReservationService implements IReservationService{
 	}
 	
 	@Override
+	public void fastReservation(UUID reservationId) {
+		
+		Reservation reservation = reservationRepository.findById(reservationId).get();
+		UUID clientId = userService.getLoggedUserId();
+		Client client = clientRepository.findById(clientId).get();
+
+		if (reservation==null)
+			throw new EntityNotFoundException("Rezervacija ne postoji");
+		
+	
+		reservation.setReservationStatus(ReservationStatus.RESERVED);
+	    reservation.setClient(client);
+		
+		reservationRepository.save(reservation);
+		
+		try {
+			emailService.sendReservationNotification(reservation);
+		} catch (MessagingException e) {}
+		
+		
+	}
+	
+	@Override
 	public List<UnspecifiedDTO<ReservationDTO>> findAllFutureClientBoatReservation(ReservationType reservationType) throws IOException {
 		
 		UUID logedClientID= userService.getLoggedUserId();
@@ -261,10 +284,39 @@ public class ReservationService implements IReservationService{
 	
 	@Override
 	public List<UnspecifiedDTO<ReservationDTO>> findAllHistoryClientReservation(ReservationType reservationType) throws IOException {
-		
+		System.out.println("cacacacaca");
 		UUID logedClientID= userService.getLoggedUserId();
+		System.out.println("nje " + logedClientID);
+		System.out.println("nje " + reservationType);
 		List<Reservation> reservations = reservationRepository.findAllHistoryClientsReservation(logedClientID, reservationType); 
+		System.out.println("cacabjbjbj");
 		System.out.println(reservations);
+		List<User> owners= userRepository.findAll();
+		List<Unit> units=unitRepository.findAll();
+		List<UnspecifiedDTO<UserNameDTO>> ownerNames= new ArrayList<UnspecifiedDTO<UserNameDTO>>();
+		List<UnspecifiedDTO<UnitDTO>> unitsDTOs= new ArrayList<UnspecifiedDTO<UnitDTO>>();
+		for(User o : owners) {
+			ownerNames.add(new UnspecifiedDTO<UserNameDTO>(o.getId(),new UserNameDTO(o.toString())));
+		}
+	  for(Unit u : units) {
+		unitsDTOs.add(unitMapper.mapUnitToUnitDTO(u));
+	  }
+		System.out.println("Istorijaaaa");
+		List<UnspecifiedDTO<ReservationDTO>> freeReservations=  resMapper.MapReservationToReservationDTO(reservations,unitsDTOs,ownerNames);             
+		
+		
+		return freeReservations;
+		
+	}
+	
+	@Override
+	public List<UnspecifiedDTO<ReservationDTO>> findAllActionReservationClient(ReservationType reservationType) throws IOException {
+		System.out.println("ossss");
+		System.err.println(reservationType);
+		List<Reservation> reservations=new ArrayList<Reservation>();
+		reservations = reservationRepository.findAllActionReservation(reservationType); 
+		System.out.println(reservations);
+		
 		List<User> owners= userRepository.findAll();
 		List<Unit> units=unitRepository.findAll();
 		List<UnspecifiedDTO<UserNameDTO>> ownerNames= new ArrayList<UnspecifiedDTO<UserNameDTO>>();

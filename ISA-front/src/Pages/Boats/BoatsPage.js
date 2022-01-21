@@ -112,7 +112,11 @@ class BoatsPage extends Component {
 
 
 
+	moveToActions =() => {
 
+		this.props.history.push("/actionBoat");
+	 }
+ 
 
 
 
@@ -661,7 +665,7 @@ class BoatsPage extends Component {
 
 						</button>
 
-						<button className="btn btn-outline-primary pull-right" type="button" onClick={this.handleFormShow}>
+						<button className="btn btn-outline-primary pull-right" type="button" onClick={this.moveToActions}>
                              Akcije
                       </button>
 						

@@ -47,6 +47,9 @@ public class Reservation {
     @Column(name = "price")
     private double price;
     
+    @Column(name = "aprice")
+    private double actionPrice;
+    
     @ManyToOne
 	private Client client;
     
@@ -76,12 +79,47 @@ public class Reservation {
 		this.startDateTime = startDateTime;
 		this.endDateTime = endDateTime;
 		this.price = price;
+		this.actionPrice = 0;
+		this.client = client;
+		this.reservationType = reservationType;
+		this.reservationStatus = reservationStatus;
+	}
+	
+	public Reservation(User owner,Unit unit, Date startDateTime, Date endDateTime, double price,
+			ReservationType reservationType, ReservationStatus reservationStatus) {
+		super();
+		this.id = UUID.randomUUID();
+		this.owner = owner;
+		this.unit=unit;
+		this.startDateTime = startDateTime;
+		this.endDateTime = endDateTime;
+		this.price = price;
+		this.actionPrice = 0;
+		this.client = null;
+		this.reservationType = reservationType;
+		this.reservationStatus = reservationStatus;
+	}
+
+
+	
+	public Reservation(User owner, Unit unit, List<OtherTag> tags, Date startDateTime, Date endDateTime,
+			double price, double actionPrice, Client client, ReservationType reservationType,
+			ReservationStatus reservationStatus) {
+		super();
+		this.id = UUID.randomUUID();
+		this.owner = owner;
+		this.unit = unit;
+		this.tags = tags;
+		this.startDateTime = startDateTime;
+		this.endDateTime = endDateTime;
+		this.price = price;
+		this.actionPrice = actionPrice;
 		this.client = client;
 		this.reservationType = reservationType;
 		this.reservationStatus = reservationStatus;
 	}
 
-	
+
 	public UUID getId() {
 		return id;
 	}
@@ -181,6 +219,16 @@ public class Reservation {
 
 	public void setReservationStatus(ReservationStatus reservationStatus) {
 		this.reservationStatus = reservationStatus;
+	}
+
+
+	public double getActionPrice() {
+		return actionPrice;
+	}
+
+
+	public void setActionPrice(double actionPrice) {
+		this.actionPrice = actionPrice;
 	}
 
 

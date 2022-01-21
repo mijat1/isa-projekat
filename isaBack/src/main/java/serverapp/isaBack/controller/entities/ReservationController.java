@@ -62,10 +62,30 @@ public class ReservationController {
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@CrossOrigin
 	@PostMapping("/cancelReservation")
-	public ResponseEntity<?>  cancelResercation(@RequestBody IdDTO reservationId) {
+	public ResponseEntity<?>  cancelReservation(@RequestBody IdDTO reservationId) {
 		
 		try {
 			reservationService.cancelReservation(reservationId.getId());
+			return new ResponseEntity<>(reservationId,HttpStatus.OK);
+		
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}	
+			
+		
+	}
+	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@CrossOrigin
+	@PostMapping("/fastReservation")
+	public ResponseEntity<?>  fastReservation(@RequestBody IdDTO reservationId) {
+		
+		try {
+			reservationService.fastReservation(reservationId.getId());
 			return new ResponseEntity<>(reservationId,HttpStatus.OK);
 		
 		} catch (EntityNotFoundException e) {
@@ -100,6 +120,19 @@ public class ReservationController {
 		System.out.println("olala");
 		try {
 			return new ResponseEntity<>(reservationService.findAllHistoryClientReservation(ReservationType.BOAT) ,HttpStatus.OK);
+		} catch (Exception e) {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+	}
+	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@CrossOrigin
+	@GetMapping("/findAllActionBoatReservationClient")
+	public ResponseEntity<List<UnspecifiedDTO<ReservationDTO>>> findAllActionBoatReservationClient() {
+		System.out.println("uslo a?");
+		try {
+			return new ResponseEntity<>(reservationService.findAllActionReservationClient(ReservationType.BOAT) ,HttpStatus.OK);
 		} catch (Exception e) {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

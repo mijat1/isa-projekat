@@ -42,6 +42,11 @@ public interface IReservationService {
 
 	void cancelReservation(UUID reservationId);
 
+	List<UnspecifiedDTO<ReservationDTO>> findAllActionReservationClient(ReservationType reservationType)
+			throws IOException;
+
+	void fastReservation(UUID reservationId);
+
 	
 
 

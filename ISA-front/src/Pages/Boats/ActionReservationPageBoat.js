@@ -7,7 +7,7 @@ import CancelModal from "../../Components/Modal/CancelModal";
 
 const API_URL="http://localhost:8080";
 
-class BoatFutureReservationsPage extends Component {
+class ActionReservationPageBoat extends Component {
 	
   
     
@@ -15,7 +15,6 @@ class BoatFutureReservationsPage extends Component {
         reservations : [],
         showCancelModal:false,
         reservationId:"",
-        percentOfCancel:0
     };
 
     constructor(props) {
@@ -31,7 +30,7 @@ class BoatFutureReservationsPage extends Component {
     }
 
     
-    Axios.get(API_URL + "/reservation/findAllFutureBoatReservationClient", {
+    Axios.get(API_URL + "/reservation/findAllActionBoatReservationClient", {
 			validateStatus: () => true,
 			headers: { Authorization: GetAuthorisation() },
 		})
@@ -62,42 +61,18 @@ class BoatFutureReservationsPage extends Component {
   };
 
 
-  
-    isAvailableToCanceled =(date) => {
-
-        var reservationDate= new Date(date);
-        reservationDate.setDate(reservationDate.getDate() -3);
-
-        if(reservationDate <= new Date()){
-            return true;
-        }
-
-        return false;
-    }
  
-    moveToReservationHistory =() => {
+    moveToReservation =() => {
 
-       this.props.history.push("/historyBoatReservation");
+       this.props.history.push("/boats");
     }
 
-    handleCancelClick = (reservation) => {
-		console.log(reservation);
-		
-				
-					this.setState({
-						reservationId: reservation.Id,
-						showCancelModal: true,
-                        percentOfCancel : reservation.EntityDTO.unit.EntityDTO.percentOfCancel
-					});
-				
-			
-			
-	};
-    handleCancelReservation = () => {
+
+    handleReservation = (reservation) => {
   
-        let reservationIdDTO = { id: this.state.reservationId};
+        let reservationIdDTO = { id: reservation.Id};
     
-        Axios.post(API_URL + "/reservation/cancelReservation",reservationIdDTO , {
+        Axios.post(API_URL + "/reservation/fastReservation",reservationIdDTO , {
                 validateStatus: () => true,
                 headers: { Authorization: GetAuthorisation() },
             })
@@ -117,9 +92,9 @@ class BoatFutureReservationsPage extends Component {
       
             } else if (res.status === 200) {
               console.log("Success");
-              alert("Uspešno je otkazana rezervacija")
+              alert("Uspešno je rezervisana akcija!")
               this.setState({showCancelModal:false});
-              Axios.get(API_URL + "/reservation/findAllFutureBoatReservationClient", {
+              Axios.get(API_URL + "/reservation/findAllActionBoatReservationClient", {
                 validateStatus: () => true,
                 headers: { Authorization: GetAuthorisation() },
             })
@@ -148,10 +123,7 @@ class BoatFutureReservationsPage extends Component {
       
     
       }
-      handleCancelModalClose = () => {
-        this.setState({ showCancelModal: false });
-    };
-
+   
 	render() {
 	
 
@@ -165,14 +137,14 @@ class BoatFutureReservationsPage extends Component {
 
 
          <button type="button" class="btn btn-outline-primary btn-lg"
-         onClick={() => this.moveToReservationHistory()}
+         onClick={() => this.moveToReservation()}
          style={{  marginTop: "2em", marginLeft: "auto",marginRight: "auto" }}
           >
-         Istorija Rezervacija
+         Nazad
          </button>
 
-         <h1 hidden={this.state.reservations.length === 0} className="text-center  mt-3  " >Vašae buduće rezervacije!</h1>
-         <h1 hidden={this.state.reservations.length !== 0} className="text-center  mt-3 text-danger"  >Nemate rezervacija!</h1>
+         <h1 hidden={this.state.reservations.length === 0} className="text-center  mt-3  " >Akcije!</h1>
+         <h1 hidden={this.state.reservations.length !== 0} className="text-center  mt-3 text-danger"  >Nema akcije!</h1>
 
 
 
@@ -229,8 +201,9 @@ class BoatFutureReservationsPage extends Component {
                                          {reservation.EntityDTO.price }
                                              <b>  din</b>
 										</div>
-                                        <div hidden={reservation.EntityDTO.actionPrice<=0}>
-											<b>Akcijska cena:</b>{" "}
+
+                                        <div>
+											<b>Cena na akciji:</b>{" "}
                                          {reservation.EntityDTO.actionPrice }
                                              <b>  din</b>
 										</div>
@@ -240,11 +213,10 @@ class BoatFutureReservationsPage extends Component {
                                     <button
 											type="button"
                                             className="btn btn-outline-danger"
-											hidden={this.isAvailableToCanceled(new Date(reservation.EntityDTO.startDateTime))}
-											onClick={() => this.handleCancelClick(reservation)}
+											onClick={() => this.handleReservation(reservation)}
 											
 										>
-											Otkaži rezervaciju
+											Rezerviši odmah
 										</button>
                                     </td>
 								</tr>
@@ -254,13 +226,6 @@ class BoatFutureReservationsPage extends Component {
                 </div>
 
 
-                <CancelModal
-					buttonName="Potvrdi"
-					show={this.state.showCancelModal}
-					onCloseModal={this.handleCancelModalClose}
-					cancelReservation={this.handleCancelReservation}
-					name={this.state.percentOfCancel}
-				/>
           
         </div>
         </React.Fragment>
@@ -269,4 +234,4 @@ class BoatFutureReservationsPage extends Component {
 	}
 }
 
-export default BoatFutureReservationsPage;
+export default ActionReservationPageBoat;
