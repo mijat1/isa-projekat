@@ -14,4 +14,5 @@ public interface IService<T, IdentifiableT> {
 	UUID create(T entityDTO);
 	void update(T entityDTO, UUID id);
     boolean delete(UUID id);
+
 }

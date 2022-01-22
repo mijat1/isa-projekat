@@ -35,6 +35,6 @@ public class UnitController {
 		return new ResponseEntity<>(unitGradeService.getAllClientsSubscribedUnits() ,HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		} 
 	}
 }

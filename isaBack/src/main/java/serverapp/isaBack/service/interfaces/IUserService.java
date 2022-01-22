@@ -30,4 +30,8 @@ public interface IUserService extends IService<UserDTO, UnspecifiedDTO<UserDTO>>
 
 	boolean isClientSubscribedToUnit(UUID unitId);
 
+	void deleteRequest(String text);
+
+	UUID replyToDeleteRequest(UUID deleteId, String reply, boolean confirmed);
+
 }

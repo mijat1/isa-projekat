@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import serverapp.isaBack.DTO.entities.DeleteRequestDTO;
 import serverapp.isaBack.DTO.users.ChangePasswordDTO;
 import serverapp.isaBack.DTO.users.ClientDTO;
+import serverapp.isaBack.DTO.users.IdDTO;
 import serverapp.isaBack.DTO.users.UserChangeInfoDTO;
 import serverapp.isaBack.security.TokenUtils;
 import serverapp.isaBack.service.users.UserService;
@@ -54,7 +56,63 @@ public class UserController {
 		
 		
 	}
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@CrossOrigin
+	@PostMapping("/deleteRequest")
+	public ResponseEntity<?>  deleteRequest(@RequestBody DeleteRequestDTO drDTO ) {
+		
+		try {
+			userService.deleteRequest(drDTO.getText());
+			return new ResponseEntity<>(HttpStatus.OK);
+		
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}	
+			
+		
+	}
 	
+	@CrossOrigin
+	@PostMapping("/replydeleteRequestF")
+	public ResponseEntity<?>  deleteRequestF(@RequestBody DeleteRequestDTO drDTO ) {
+		
+		try {
+			userService.replyToDeleteRequest(drDTO.getId(),drDTO.getReply(),false);
+			return new ResponseEntity<>(HttpStatus.OK);
+		
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}	
+			
+		
+	}
+	
+	@CrossOrigin
+	@PostMapping("/replydeleteRequestT")
+	public ResponseEntity<?>  deleteRequestT(@RequestBody DeleteRequestDTO drDTO) {
+		
+		try {
+			userService.replyToDeleteRequest(drDTO.getId(),drDTO.getReply(),true);
+			return new ResponseEntity<>(HttpStatus.OK);
+		
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}	
+			
+		
+	}
 	@PutMapping("/client") 
 	@CrossOrigin
 	@PreAuthorize("hasRole('ROLE_CLIENT')")

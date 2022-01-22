@@ -1,12 +1,14 @@
 package serverapp.isaBack.service.users;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 
+import org.hibernate.sql.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.security.core.Authentication;
@@ -22,9 +24,12 @@ import serverapp.isaBack.DTO.users.UserDTO;
 import serverapp.isaBack.DTO.users.UserRegistrationDTO;
 import serverapp.isaBack.model.Authority;
 import serverapp.isaBack.model.Client;
+import serverapp.isaBack.model.ComplaintUser;
+import serverapp.isaBack.model.DeleteRequest;
 import serverapp.isaBack.model.Unit;
 import serverapp.isaBack.model.User;
 import serverapp.isaBack.repository.ClientRepository;
+import serverapp.isaBack.repository.DeletetRequestRepository;
 import serverapp.isaBack.repository.UnitRepository;
 import serverapp.isaBack.repository.UserRepository;
 import serverapp.isaBack.service.interfaces.IUserService;
@@ -48,6 +53,9 @@ public class UserService implements IUserService{
 	
 	@Autowired
 	private UnitRepository unitRepository;
+	
+	@Autowired
+	private DeletetRequestRepository drRepository;
 	
 	@Autowired
 	private EmailService emailService;
@@ -192,6 +200,34 @@ public class UserService implements IUserService{
 		Client client = clientRepository.getOne(loggedUser);
 		
 		return client.isClientSubscribedToUnit(unitId);
+	}
+	
+	@Override
+	public void deleteRequest(String text) {
+		Date current = new Date();
+		UUID loggedUser= this.getLoggedUserId();
+		User client = userRepository.getOne(loggedUser);
+		DeleteRequest dr = new DeleteRequest(client,current,text);
+		drRepository.save(dr);
+	}
+	
+	@Override
+	public UUID replyToDeleteRequest(UUID deleteId,String reply,boolean confirmed){
+		System.out.println("nje " + deleteId);
+		DeleteRequest deleteUser = drRepository.findById(deleteId).get();
+		
+		deleteUser.setReply(reply);
+		deleteUser.setActive(false);
+		if(confirmed) {
+			User user = deleteUser.getUser();
+			user.setActive(false);
+			
+		}
+			
+		drRepository.save(deleteUser);
+		
+		return deleteId;
+
 	}
 	@Override
 	public List<UnspecifiedDTO<AuthorityDTO>> findAll() {

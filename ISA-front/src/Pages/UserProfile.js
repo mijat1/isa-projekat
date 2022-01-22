@@ -43,7 +43,7 @@ class UserProfile extends Component {
 		emptyNewPasswordError: "none",
 		emptyNewPasswordRepeatedError: "none",
 		newPasswordAndRepeatedNotSameError: "none",
-
+		textDelete:"",
 		
 		userAllergens: [],
 		hiddenAllergenSuccessfulAlert: true,
@@ -386,7 +386,20 @@ class UserProfile extends Component {
 
 
 
+	handleSubscribe = () => {
+		console.log();
+		let deleteIdDTO = { id: this.state.id ,
+		text:this.state.textDelete};
+    Axios.post(API_URL+"/users/deleteRequest/",deleteIdDTO, {
+    validateStatus: () => true, headers: { Authorization: GetAuthorisation() }
+     })
+    .then((res) => {
+        
 
+        
+    })
+
+	};
 
 	
 
@@ -419,7 +432,14 @@ class UserProfile extends Component {
 
 	
 
+		<button type="button" class="btn btn-outline-primary "
+         onClick={() => this.handleClickDelete()}
+         style={{  marginTop: "2em", marginLeft: "auto",marginRight: "auto" }}
+         >
 
+		 Zahtev za brisanje naloge
+        
+        </button>
 
 	
 			
