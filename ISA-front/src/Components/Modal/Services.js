@@ -84,6 +84,23 @@ class Services extends Component {
             }
         }).catch((err) => {
         });
+    } else  if(this.props.type ==="COURSE"){
+        Axios
+        .post(API_URL + "/reservation/createCourseReservaton", newReservationDTO, {
+            validateStatus: () => true,
+            headers: { Authorization: GetAuthorisation() },})
+        .then((res) =>{
+            console.log(res.status)
+            if (res.status === 201) {
+                alert("Uspešno izvršena rezervacija.");
+                this.handleClickOnClose();
+            }else if (res.status === 400) {
+                alert(res.data);
+            }else{
+                alert("Serverska Greška!");
+            }
+        }).catch((err) => {
+        });
     }
 
 }

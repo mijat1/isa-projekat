@@ -23,6 +23,7 @@ import serverapp.isaBack.model.AvailablePeriod;
 import serverapp.isaBack.model.Boat;
 import serverapp.isaBack.model.Client;
 import serverapp.isaBack.model.Cottage;
+import serverapp.isaBack.model.FishingCourse;
 import serverapp.isaBack.model.OtherTag;
 import serverapp.isaBack.model.Reservation;
 import serverapp.isaBack.model.ReservationStatus;
@@ -34,6 +35,7 @@ import serverapp.isaBack.repository.AvailablePeriodRepository;
 import serverapp.isaBack.repository.BoatRepository;
 import serverapp.isaBack.repository.ClientRepository;
 import serverapp.isaBack.repository.CottageRepository;
+import serverapp.isaBack.repository.FishingCourseRepository;
 import serverapp.isaBack.repository.ReservationRepository;
 import serverapp.isaBack.repository.UnitRepository;
 import serverapp.isaBack.repository.UserRepository;
@@ -65,6 +67,9 @@ public class ReservationService implements IReservationService{
 	
 	@Autowired
 	private CottageRepository ctRepository;
+	
+	@Autowired
+	private FishingCourseRepository cRepository;
 	
 	@Autowired
 	private UnitRepository  unitRepository;
@@ -299,7 +304,6 @@ public List<Unit> findCoursesWithFreePeroid(List<AvailablePeriod> availablePerio
 	}
 	
 	
-	
 	public void anyBusyCottageReservationInDataRange(NewReservationDTO reservationRequestDTO,Date startDate, Date endDate  ){
 		
 		if(reservationRepository.findAllBusyCtReservationInDataRange(startDate,endDate,reservationRequestDTO.getUnitId()).size()>0)
@@ -346,6 +350,80 @@ public List<Unit> findCoursesWithFreePeroid(List<AvailablePeriod> availablePerio
 			throw new IllegalArgumentException("Početni datum ne može biti pre trenutnog.");
 		
 		if(reservationRepository.findAllCtReservationsForClientInDataRange(reservation.getStartDateTime(), reservation.getEndDateTime(), reservation.getClient().getId()).size() > 0)
+				throw new IllegalArgumentException("Klijent ima već rezervaciju za vikendicu u izabranom terminu");
+	}
+	
+	
+	@Override
+	public void makeCourseReservation(NewReservationDTO reservationDTO){
+		
+		Date startDate= new Date(reservationDTO.getStartDateTime());
+		Date endDate= new Date(reservationDTO.getStartDateTime()+24*60*60*1000*reservationDTO.getDays());
+		
+		System.out.println( "startno vreme " + startDate + "   " +  " Krajnje vremee " + endDate);
+		
+	
+		//anyBusyCourseReservationInDataRange(reservationDTO,startDate,endDate);
+		
+		Reservation reservation= makeCReservation(reservationDTO,startDate,endDate);
+		
+		reservationRepository.save(reservation);
+		
+		
+		try {
+			emailService.sendReservationNotification(reservation);
+		} catch (MessagingException e) {}
+	}
+	
+	
+	public void anyBusyCourseReservationInDataRange(NewReservationDTO reservationRequestDTO,Date startDate, Date endDate,UUID userId){
+		
+		if(reservationRepository.findAllBusyCReservationInDataRange(startDate,endDate,userId).size()>0)
+			throw new IllegalArgumentException("Instruktor je zauzet u tom terminu.");
+		
+		/*if(!( periodRepository.findAvailablePeriodInDateRangeForCourse(startDate,endDate,reservationRequestDTO.getUnitId()).size()>0));
+			throw new IllegalArgumentException("Kurs nije dostupan u izabranom terminu");*/
+	}
+	
+	
+
+	public Reservation makeCReservation(NewReservationDTO reservationRequestDTO,Date startDate, Date endDate ){
+		System.out.println("nj njenj");
+		UUID clientId = userService.getLoggedUserId();
+		Client client = clientRepository.findById(clientId).get();
+	    FishingCourse course = cRepository.findById(reservationRequestDTO.getUnitId()).get();
+	    System.out.println("userrrrr");
+	   
+		User owner = userRepository.findById(course.getInstructor().getId()).get();
+		 System.out.println("sas" + owner.getId());
+		 anyBusyCourseReservationInDataRange(reservationRequestDTO,startDate,endDate,owner.getId());
+		Unit unit = unitRepository.findById(course.getId()).get();
+		Double price= unit.getPrice()*reservationRequestDTO.getDays();
+		List<OtherTag> servicesList=new ArrayList<OtherTag>();
+		for(OtherTag o:unit.getServices()) {
+			for(UUID tagId : reservationRequestDTO.getListServices()) {
+				if(tagId.equals(o.getId())){
+					servicesList.add(o);
+					price+=o.getPrice();
+				}
+			}
+			
+			
+		}
+		Reservation reservation= new Reservation( owner,unit, startDate, endDate,price,client, ReservationType.COURSE, ReservationStatus.RESERVED);
+		
+		isCtReservationValid(reservation);
+		
+		return reservation;
+		
+	}
+	
+	public void isCReservationValid(Reservation reservation ){
+		
+		if (!(reservation.getStartDateTime().after(new Date())))
+			throw new IllegalArgumentException("Početni datum ne može biti pre trenutnog.");
+		
+		if(reservationRepository.findAllCReservationsForClientInDataRange(reservation.getStartDateTime(), reservation.getEndDateTime(), reservation.getClient().getId()).size() > 0)
 				throw new IllegalArgumentException("Klijent ima već rezervaciju za vikendicu u izabranom terminu");
 	}
 	

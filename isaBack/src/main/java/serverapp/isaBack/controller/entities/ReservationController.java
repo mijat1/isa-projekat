@@ -79,6 +79,27 @@ public class ReservationController {
 		
 	}
 	
+	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@CrossOrigin
+	@PostMapping("/createCourseReservaton")
+	public ResponseEntity<?> createCourseReservaton(@RequestBody NewReservationDTO newReservationDTO) {
+			Date neki= new Date(newReservationDTO.getStartDateTime());
+			System.out.println(newReservationDTO.getUnitId() + "    "+  neki);
+		try {
+			reservationService.makeCourseReservation(newReservationDTO);
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}	
+		
+		
+	}
+	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@CrossOrigin
 	@PostMapping("/cancelReservation")

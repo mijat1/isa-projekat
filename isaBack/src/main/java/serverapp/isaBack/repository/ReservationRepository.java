@@ -25,6 +25,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID>{
 			+ " AND r.unit.id = ?3  AND NOT (r.startDateTime >= ?2 OR r.endDateTime <= ?1) ")
 	List<Reservation> findAllBusyCtReservationInDataRange(Date startDate, Date endDate,UUID boatId);
 	
+	@Query(value = "SELECT r FROM Reservation r WHERE r.reservationType = 'COURSE' AND r.reservationStatus = 'RESERVED' "
+			+ " AND r.owner.id = ?3  AND NOT (r.startDateTime >= ?2 OR r.endDateTime <= ?1) ")
+	List<Reservation> findAllBusyCReservationInDataRange(Date startDate, Date endDate,UUID boatId);
+	
 	@Query(value = "SELECT r FROM Reservation r WHERE r.reservationType = 'BOAT' AND r.reservationStatus = 'RESERVED'"
 			+ " AND r.client.id = ?3 AND NOT (r.startDateTime >= ?2 OR r.endDateTime <= ?1) ")
 	List<Reservation> findAllReservationsForClientInDataRange(Date startDate, Date endDate,UUID clientId);
@@ -33,6 +37,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID>{
 			+ " AND r.client.id = ?3 AND NOT (r.startDateTime >= ?2 OR r.endDateTime <= ?1) ")
 	List<Reservation> findAllCtReservationsForClientInDataRange(Date startDate, Date endDate,UUID clientId);
 
+	@Query(value = "SELECT r FROM Reservation r WHERE r.reservationType = 'COURSE' AND r.reservationStatus = 'RESERVED'"
+			+ " AND r.client.id = ?3 AND NOT (r.startDateTime >= ?2 OR r.endDateTime <= ?1) ")
+	List<Reservation> findAllCReservationsForClientInDataRange(Date startDate, Date endDate,UUID clientId);
 
 	@Query(value = "SELECT r FROM Reservation r WHERE r.client.id = ?1 AND r.startDateTime > CURRENT_TIMESTAMP"
 			+ "  AND r.reservationType = ?2 AND r.reservationStatus = 'RESERVED' ")

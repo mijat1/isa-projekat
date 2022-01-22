@@ -53,6 +53,8 @@ public interface IReservationService {
 
 	List<Unit> findAllFreeCourses(Date startDate, Date endDate);
 
+	void makeCourseReservation(NewReservationDTO reservationDTO);
+
 	
 
 
