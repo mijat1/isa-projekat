@@ -247,6 +247,19 @@ public class ReservationController {
 	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@CrossOrigin
+	@GetMapping("/findAllActionCourseReservationClient")
+	public ResponseEntity<List<UnspecifiedDTO<ReservationDTO>>> findAllActionCourseReservationClient() {
+		System.out.println("uslo a?");
+		try {
+			return new ResponseEntity<>(reservationService.findAllActionReservationClient(ReservationType.COURSE) ,HttpStatus.OK);
+		} catch (Exception e) {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+	}
+	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@CrossOrigin
 	@GetMapping("/historyReservation/sortByPriceAscending/{resrvationType}")
 	public ResponseEntity<List<UnspecifiedDTO<ReservationDTO>>> findAllHistoryClientsReservationsSortByPriceAscending(@PathVariable ReservationType resrvationType) {
 			

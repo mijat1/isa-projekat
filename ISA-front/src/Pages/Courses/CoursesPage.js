@@ -114,7 +114,7 @@ class CoursesPage extends Component {
 
 	moveToActions =() => {
 
-		this.props.history.push("/actionCottage");
+		this.props.history.push("/actionCourse");
 	 }
  
 

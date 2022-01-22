@@ -24,6 +24,7 @@ import {
 import ActionReservationPageCottage from './Pages/Cottages/ActionReservationPageCottage';
 import CourseFutureReservationsPage from './Pages/Courses/CourseFutureReservationsPage';
 import CourseHistoryReservationsPage from './Pages/Courses/CourseHistoryReservationsPage';
+import ActionReservationPageCourse from './Pages/Courses/ActionReservationPageCourse';
 
 
 
@@ -55,6 +56,7 @@ function App() {
         <Route  to ="/unitComplaint" path ="/unitComplaint"  component={ComplaintUnitPage}/>
         <Route  to ="/actionBoat" path ="/actionBoat"  component={ActionReservationPageBoat}/>
         <Route  to ="/actionCottage" path ="/actionCottage"  component={ActionReservationPageCottage}/>
+        <Route  to ="/actionCourse" path ="/actionCourse"  component={ActionReservationPageCourse}/>
         </Switch>
     </Router>
      
