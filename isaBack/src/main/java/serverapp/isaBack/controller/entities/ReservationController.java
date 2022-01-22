@@ -169,6 +169,19 @@ public class ReservationController {
 	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@CrossOrigin
+	@GetMapping("/findAllFutureCourseReservationClient")
+	public ResponseEntity<List<UnspecifiedDTO<ReservationDTO>>> findAllFutureCourseReservationClient() {
+		System.out.println("olala");
+		try {
+			return new ResponseEntity<>(reservationService.findAllFutureClientBoatReservation(ReservationType.COURSE) ,HttpStatus.OK);
+		} catch (Exception e) {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+	}
+	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@CrossOrigin
 	@GetMapping("/findAllHistoryBoatReservationClient")
 	public ResponseEntity<List<UnspecifiedDTO<ReservationDTO>>> findAllHistoryClientsReservations() {
 		System.out.println("olala");
@@ -187,6 +200,19 @@ public class ReservationController {
 		System.out.println("lelelelewlle");
 		try {
 			return new ResponseEntity<>(reservationService.findAllHistoryClientReservation(ReservationType.COTTAGE) ,HttpStatus.OK);
+		} catch (Exception e) {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+	}
+	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@CrossOrigin
+	@GetMapping("/findAllHistoryCourseReservationClient")
+	public ResponseEntity<List<UnspecifiedDTO<ReservationDTO>>> findAllHistoryCourseReservationClient() {
+		System.out.println("lelelelewlle");
+		try {
+			return new ResponseEntity<>(reservationService.findAllHistoryClientReservation(ReservationType.COURSE) ,HttpStatus.OK);
 		} catch (Exception e) {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

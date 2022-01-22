@@ -22,6 +22,8 @@ import {
   Switch
 } from "react-router-dom";
 import ActionReservationPageCottage from './Pages/Cottages/ActionReservationPageCottage';
+import CourseFutureReservationsPage from './Pages/Courses/CourseFutureReservationsPage';
+import CourseHistoryReservationsPage from './Pages/Courses/CourseHistoryReservationsPage';
 
 
 
@@ -46,6 +48,8 @@ function App() {
         <Route  to ="/historyBoatReservation" path ="/historyBoatReservation"  component={BoatHistoryReservationsPage}/>
         <Route  to ="/cottageFutureReservation" path ="/cottageFutureReservation"  component={CottageFutureReservationsPage}/>
         <Route  to ="/historyCottageReservation" path ="/historyCottageReservation"  component={CottageHistoryReservationsPage}/>
+        <Route  to ="/courseFutureReservation" path ="/courseFutureReservation"  component={CourseFutureReservationsPage}/>
+        <Route  to ="/courseHistoryReservation" path ="/courseHistoryReservation"  component={CourseHistoryReservationsPage}/>
         <Route  to ="/userProfile" path ="/userProfile"  component={UserProfilePage}/>
         <Route  to ="/userComplaint" path ="/userComplaint"  component={ComplaintUserPage}/>
         <Route  to ="/unitComplaint" path ="/unitComplaint"  component={ComplaintUnitPage}/>

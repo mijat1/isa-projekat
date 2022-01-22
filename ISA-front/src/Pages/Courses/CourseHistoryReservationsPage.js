@@ -11,7 +11,7 @@ import {NavLink, Redirect } from "react-router-dom";
 
 const API_URL="http://localhost:8080";
 
-class CottageHistoryReservationsPage extends Component {
+class CourseHistoryReservationsPage extends Component {
 	
   
     
@@ -47,7 +47,7 @@ class CottageHistoryReservationsPage extends Component {
     }
 
     
-    Axios.get(API_URL + "/reservation/findAllHistoryCottageReservationClient", {
+    Axios.get(API_URL + "/reservation/findAllHistoryCourseReservationClient", {
 			validateStatus: () => true,
 			headers: { Authorization: GetAuthorisation() },
 		})
@@ -83,7 +83,7 @@ class CottageHistoryReservationsPage extends Component {
 
   moveToFutureReservation =() => {
 
-       this.props.history.push("/cottageFutureReservation");
+       this.props.history.push("/courseFutureReservation");
     }
 
 
@@ -91,7 +91,7 @@ class CottageHistoryReservationsPage extends Component {
 	handleSortByPriceAscending =() => {
 
 		console.log("sortiranjeee");
-		var resrvationType= "COTTAGE";
+		var resrvationType= "COURSE";
 
 		Axios.get(API_URL + "/reservation/historyReservation/sortByPriceAscending/" + resrvationType , {
 			validateStatus: () => true,
@@ -114,7 +114,7 @@ class CottageHistoryReservationsPage extends Component {
 
 	handleSortByPriceDescending =() => {
 
-		var resrvationType= "COTTAGE";
+		var resrvationType= "COURSE";
 
 		Axios.get(API_URL + "/reservation/historyReservation/sortByPriceDescending/" + resrvationType , {
 			validateStatus: () => true,
@@ -138,7 +138,7 @@ class CottageHistoryReservationsPage extends Component {
 
 
 		console.log("sortiranjeee");
-		var resrvationType= "COTTAGE";
+		var resrvationType= "COURSE";
 
 		Axios.get(API_URL + "/reservation/historyReservation/sortByDateAscending/" + resrvationType , {
 			validateStatus: () => true,
@@ -162,7 +162,7 @@ class CottageHistoryReservationsPage extends Component {
 	handleSortByDateDescending =() => {
 
 		
-		var resrvationType= "COTTAGE";
+		var resrvationType= "COURSE";
 
 		Axios.get(API_URL + "/reservation/historyReservation/sortByDateDescending/" + resrvationType , {
 			validateStatus: () => true,
@@ -185,7 +185,7 @@ class CottageHistoryReservationsPage extends Component {
 
 	handleSortByDurationAppointmentAscending =() => {
 
-		var resrvationType= "COTTAGE";
+		var resrvationType= "COURSE";
 
 		Axios.get(API_URL + "/reservation/historyReservation/sortByDurationAscending/" + resrvationType , {
 			validateStatus: () => true,
@@ -209,7 +209,7 @@ class CottageHistoryReservationsPage extends Component {
 	
 	handleSortByDurationAppointmentDescending =() => {
 
-		var resrvationType= "COTTAGE";
+		var resrvationType= "COURSE";
 
 		Axios.get(API_URL + "/reservation/historyReservation/sortByDurationDescending/" + resrvationType , {
 			validateStatus: () => true,
@@ -377,7 +377,7 @@ class CottageHistoryReservationsPage extends Component {
 		</div>	
 
 
-         <h1 hidden={this.state.reservations.length === 0} className="text-center  mt-3  " >Istorija rezervacija vikendica</h1>
+         <h1 hidden={this.state.reservations.length === 0} className="text-center  mt-3  " >Istorija rezervacija casova pecanja</h1>
          <h1 hidden={this.state.reservations.length !== 0} className="text-center  mt-3 text-danger"  >Nema istorije</h1>
 
 
@@ -507,4 +507,4 @@ class CottageHistoryReservationsPage extends Component {
 	}
 }
 
-export default CottageHistoryReservationsPage;
+export default CourseHistoryReservationsPage;
