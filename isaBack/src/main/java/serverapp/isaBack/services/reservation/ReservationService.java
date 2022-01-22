@@ -99,10 +99,25 @@ public class ReservationService implements IReservationService{
 				
 		List<Reservation> busyReservationsInDataRange= reservationRepository.findAllreservationsInDataRange(startDate,endDate,ReservationType.COTTAGE);
 					
-		List<Unit> pharmacyWithFreeConsulations= findBoatsWithFreePeroid(availablePeriodInDateRange,busyReservationsInDataRange);
+		List<Unit> cottagesFree= findBoatsWithFreePeroid(availablePeriodInDateRange,busyReservationsInDataRange);
 		
 				
-		return pharmacyWithFreeConsulations;
+		return cottagesFree;
+	}
+	
+	@Override	
+	public List<Unit> findAllFreeCourses(Date startDate, Date endDate) {
+		
+		List<AvailablePeriod> availablePeriodInDateRange= new ArrayList<AvailablePeriod>();
+		
+		availablePeriodInDateRange= periodRepository.findAvailablePeriodInDateRange(startDate,endDate,UnitType.COURSE);
+				
+		List<Reservation> busyReservationsInDataRange= reservationRepository.findAllreservationsInDataRange(startDate,endDate,ReservationType.COTTAGE);
+					
+		List<Unit> cottagesFree= findCoursesWithFreePeroid(availablePeriodInDateRange,busyReservationsInDataRange);
+		
+				
+		return cottagesFree;
 	}
 	
 	
@@ -131,6 +146,34 @@ public class ReservationService implements IReservationService{
 		
 		
 		return throwOutDuplicatesBoats(boatsWithFreePeriod);
+		
+		
+	}
+	
+public List<Unit> findCoursesWithFreePeroid(List<AvailablePeriod> availablePeriodInDateRange, List<Reservation> reservationInDataRange){
+		
+		List<Unit> coursesWithFreePeriod= new ArrayList<Unit>();
+		System.out.println("ej alo bidiou");
+		for (AvailablePeriod currentAP : availablePeriodInDateRange) {
+				System.out.println("ej alo bidiou");
+				boolean scheduled= false;			
+				
+				for (Reservation currentR : reservationInDataRange) {
+					if(currentAP.getOwner().getId().equals(currentR.getOwner().getId())) {
+						scheduled = true;
+						break;
+					}
+					
+				}
+				
+				if(scheduled==false)
+					coursesWithFreePeriod.add(currentAP.getUnit());
+			
+		}
+		
+		
+		
+		return throwOutDuplicatesBoats(coursesWithFreePeriod);
 		
 		
 	}

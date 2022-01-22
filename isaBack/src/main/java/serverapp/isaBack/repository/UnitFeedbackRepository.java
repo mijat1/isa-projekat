@@ -11,4 +11,5 @@ public interface UnitFeedbackRepository extends JpaRepository<UnitFeedback, UUID
 	@Query(value = "SELECT AVG(u.grade) FROM UnitFeedback u WHERE u.unit.id = ?1")
 	double getAvgGradeForUnit(UUID unitId);
 	
+	
 }

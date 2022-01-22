@@ -26,7 +26,7 @@ public class FishingCourse extends Unit{
 	@ManyToOne
 	private FishingInstructor instructor;
 
-	
+	private int capacity;
 	
 	public FishingCourse() {
 		super();
@@ -34,11 +34,12 @@ public class FishingCourse extends Unit{
 	}
 
 
-	public FishingCourse(String biography, List<FishingEquipment> fEqupment, FishingInstructor instructor) {
+	public FishingCourse(String biography, List<FishingEquipment> fEqupment, FishingInstructor instructor,int capacity) {
 		super();
 		this.biography = biography;
 		this.fEqupment = fEqupment;
 		this.instructor = instructor;
+		this.capacity = capacity;
 	}
 
 
@@ -64,6 +65,16 @@ public class FishingCourse extends Unit{
 
 	public void setInstructor(FishingInstructor instructor) {
 		this.instructor = instructor;
+	}
+
+
+	public int getCapacity() {
+		return capacity;
+	}
+
+
+	public void setCapacity(int capacity) {
+		this.capacity = capacity;
 	}
 	
 	

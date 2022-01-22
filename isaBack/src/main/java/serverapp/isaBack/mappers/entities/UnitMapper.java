@@ -80,10 +80,10 @@ public class UnitMapper {
 			imageBytes = extractBytes(basePath+"\\src\\main\\java\\serverapp\\isaBack\\images\\nemaslike.png");
 		}
 			List<UnspecifiedDTO<OtherTagDTO>> tags= MapTagToTagDTO(course.getServices());
- 		tags.add(new UnspecifiedDTO<OtherTagDTO>(UUID.randomUUID(),new OtherTagDTO("osnovna cena",course.getPrice())));
+ 		//tags.add(new UnspecifiedDTO<OtherTagDTO>(UUID.randomUUID(),new OtherTagDTO("osnovna cena",course.getPrice())));
 		
 		return new UnspecifiedDTO<CourseDTO> (course.getId(), new CourseDTO( course.getName(), course.getAddress(),
-				course.getDescription(),imageBytes,tags,avgGrade,course.getInstructor().toString(),course.getBiography()));
+				course.getDescription(),imageBytes,tags,avgGrade,course.getInstructor().toString(),course.getBiography(),course.getPrice()));
 	}
 	
 	

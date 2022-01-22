@@ -51,6 +51,8 @@ public interface IReservationService {
 
 	void makeCottageReservation(NewReservationDTO reservationDTO);
 
+	List<Unit> findAllFreeCourses(Date startDate, Date endDate);
+
 	
 
 

@@ -21,8 +21,10 @@ public class CourseDTO {
 	
 	private String biography;
 	
+	private double price;
+	
 	public CourseDTO(String name, String address, String description, byte[] image,
-			List<UnspecifiedDTO<OtherTagDTO>> services, double avgGrade,String instructor,String biography) {
+			List<UnspecifiedDTO<OtherTagDTO>> services, double avgGrade,String instructor,String biography,double price) {
 		super();
 		this.name = name;
 		this.address = address;
@@ -32,6 +34,7 @@ public class CourseDTO {
 		this.avgGrade = avgGrade;
 		this.instructor=instructor;
 		this.biography=biography;
+		this.price = price;
 	}
 
 
@@ -111,4 +114,16 @@ public class CourseDTO {
 	public void setBiography(String biography) {
 		this.biography = biography;
 	}
+
+
+	public double getPrice() {
+		return price;
+	}
+
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	
+	
 }

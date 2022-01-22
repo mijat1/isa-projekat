@@ -95,7 +95,7 @@ public class CottageController {
 		System.out.println("start " + startDate +" end " +endDate + " dani " + days );
 		System.out.println("ocenaaa "+ gradeFrom);
 		try {
-		return new ResponseEntity<>(cottageService.findAllCottagesWithFreePeriodSortByGradeDescending(startDate,endDate,people,location,gradeFrom,gradeTo) ,HttpStatus.OK);
+		return new ResponseEntity<>(cottageService.findAllCottagesWithFreePeriodSortByPriceDescending(startDate,endDate,people,location,gradeFrom,gradeTo) ,HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -111,7 +111,7 @@ public class CottageController {
 		System.out.println("start " + startDate +" end " +endDate + " dani " + days );
 		System.out.println("ocenaaa "+ gradeFrom);
 		try {
-		return new ResponseEntity<>(cottageService.findAllCottagesWithFreePeriodSortByGradeAscending(startDate,endDate,people,location,gradeFrom,gradeTo) ,HttpStatus.OK);
+		return new ResponseEntity<>(cottageService.findAllCottagesWithFreePeriodSortByPriceAscending(startDate,endDate,people,location,gradeFrom,gradeTo) ,HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

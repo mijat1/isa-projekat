@@ -6,4 +6,6 @@ public interface IUnitGradeService {
 
 	double getAvgGradeForUnit(UUID unitId);
 
+	double getAvgGradeForUser(UUID userId);
+
 }
