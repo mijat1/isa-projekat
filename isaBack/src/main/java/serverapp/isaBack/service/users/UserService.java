@@ -22,8 +22,10 @@ import serverapp.isaBack.DTO.users.UserDTO;
 import serverapp.isaBack.DTO.users.UserRegistrationDTO;
 import serverapp.isaBack.model.Authority;
 import serverapp.isaBack.model.Client;
+import serverapp.isaBack.model.Unit;
 import serverapp.isaBack.model.User;
 import serverapp.isaBack.repository.ClientRepository;
+import serverapp.isaBack.repository.UnitRepository;
 import serverapp.isaBack.repository.UserRepository;
 import serverapp.isaBack.service.interfaces.IUserService;
 import serverapp.isaBack.unspecifiedDTO.UnspecifiedDTO;
@@ -43,6 +45,9 @@ public class UserService implements IUserService{
 	
 	@Autowired
 	private ClientRepository clientRepository;
+	
+	@Autowired
+	private UnitRepository unitRepository;
 	
 	@Autowired
 	private EmailService emailService;
@@ -148,6 +153,46 @@ public class UserService implements IUserService{
 		return new Client(clientRegDTO.getEmail(), passwordEncoder.encode(clientRegDTO.getPassword()), clientRegDTO.getName(), clientRegDTO.getSurname(), clientRegDTO.getAddress(), clientRegDTO.getPhoneNumber());
 	}
 
+	
+	@Override
+	public boolean subscribeToUnit(UUID pharmacyId) {
+		try {
+			UUID loggedUser= this.getLoggedUserId();
+
+			Client client = clientRepository.getOne(loggedUser);
+			Unit unit = unitRepository.getOne(pharmacyId);
+			client.addSubscribeToUnit(unit);
+			
+			clientRepository.save(client);
+			return true;
+		} 
+		catch (EntityNotFoundException e) { return false; } 
+		catch (IllegalArgumentException e) { return false; }		
+	}
+	
+	@Override
+	public boolean unsubscribeFromUnit(UUID unitId) {
+		try {
+			UUID loggedUser= this.getLoggedUserId();
+
+			Client client = clientRepository.getOne(loggedUser);
+			client.removeSubscribeFromUnit(unitId);
+			
+			clientRepository.save(client);
+			return true;
+		} 
+		catch (EntityNotFoundException e) { return false; } 
+		catch (IllegalArgumentException e) { return false; }	
+	}
+	
+	@Override
+	public boolean isClientSubscribedToUnit(UUID unitId) {
+		
+		UUID loggedUser= this.getLoggedUserId();
+		Client client = clientRepository.getOne(loggedUser);
+		
+		return client.isClientSubscribedToUnit(unitId);
+	}
 	@Override
 	public List<UnspecifiedDTO<AuthorityDTO>> findAll() {
 		// TODO Auto-generated method stub

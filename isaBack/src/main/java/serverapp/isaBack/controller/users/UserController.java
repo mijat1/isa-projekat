@@ -1,5 +1,7 @@
 package serverapp.isaBack.controller.users;
 
+import java.util.UUID;
+
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import serverapp.isaBack.DTO.users.ChangePasswordDTO;
@@ -81,6 +84,39 @@ public class UserController {
 		}
 		catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/subscribeToUnit/") 
+	@CrossOrigin
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	public ResponseEntity<?> subscribeToUnit(@RequestParam UUID unitId ) {
+
+		System.out.println("usao11");
+	  
+		try {
+			userService.subscribeToUnit(unitId);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT); 
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+		}
+	}
+	
+	@GetMapping("/unsubscribeFromUnit") 
+	@CrossOrigin
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	public ResponseEntity<?> unsubscribeFromUnit(@RequestParam UUID unitId ) {
+
+		System.out.println("usao22");
+		try {
+			userService.unsubscribeFromUnit(unitId);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT); 
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
 		}
 	}
 }

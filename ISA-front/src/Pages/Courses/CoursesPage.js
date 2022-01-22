@@ -42,7 +42,8 @@ class CoursesPage extends Component {
 		openPriceModal:false,
 		openReserveModal:false,
 		loggedClient: false,
-		isUnitEmpty : false
+		isUnitEmpty : false,
+		subscribed: []
 	};
 
 	handleFormShow = () => {
@@ -52,6 +53,22 @@ class CoursesPage extends Component {
 	componentDidMount() {
 		this.state.loggedClient= this.hasRole("ROLE_CLIENT");
 		console.log(localStorage.getItem("keyRole"));
+
+		if(this.hasRole("ROLE_CLIENT")){
+			Axios.get(API_URL+"/unit/AllClientSubscribedUnits", {
+			
+			 
+			validateStatus: () => true, headers: { Authorization: GetAuthorisation() }
+			 })
+		
+			 .then((res) => {
+			  this.setState({ subscribed: res.data });
+			  console.log(res.data);
+			})
+			.catch((err) => {
+			  console.log(err);
+			});
+		  }
 		Axios.get(API_URL + "/course/allCourses")
 
 			.then((res) => {
@@ -633,7 +650,88 @@ class CoursesPage extends Component {
 	};
 
 	
+	handleSubscribe = (unit) => {
+		console.log(unit);
+    	
+    Axios.get(API_URL+"/users/subscribeToUnit/", {
+    
+      params: {
+        unitId: unit.Id
+    },
+    validateStatus: () => true, headers: { Authorization: GetAuthorisation() }
+     })
+    .then((res) => {
+        
+      Axios.get(API_URL+"/unit/AllClientSubscribedUnits", {
+    
+     
+              validateStatus: () => true, headers: { Authorization: GetAuthorisation() }
+              })
 
+              .then((res) => {
+                this.setState({ subscribed: res.data });
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+        
+    })
+
+	};
+
+
+  handleUnsubscribe = (unit) => {
+		console.log(unit);
+    
+		
+
+    Axios.get(API_URL+"/users/unsubscribeFromUnit/", {
+    
+      params: {
+        unitId: unit.Id
+    },
+    validateStatus: () => true, headers: { Authorization: GetAuthorisation() }
+     })
+    .then((res) => {
+
+      Axios.get(API_URL+"/unit/AllClientSubscribedUnits", {
+    
+     
+          validateStatus: () => true, headers: { Authorization: GetAuthorisation() }
+          })
+
+          .then((res) => {
+            this.setState({ subscribed: res.data });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        
+        
+        
+    })
+
+	};
+
+  
+
+  isSubscribed = (unit) => {
+		console.log(unit);
+    
+		for (const [index, value] of this.state.subscribed.entries()) {
+
+      if(this.state.subscribed[index].Id===unit.Id){
+        console.log("usao");
+        return true;
+      }
+
+    }
+
+    return false;
+
+     
+
+	};
 
 	render() {
 
@@ -665,7 +763,7 @@ class CoursesPage extends Component {
 
 						</button>
 
-						<button className="btn btn-outline-primary pull-right" type="button" onClick={this.moveToActions}>
+						<button className="btn btn-outline-primary pull-right" hidden={!this.hasRole("ROLE_CLIENT")} type="button" onClick={this.moveToActions}>
                              Akcije
                       </button>
 						
@@ -891,6 +989,27 @@ class CoursesPage extends Component {
 												</button>
 											
 											</div>
+											<div className="mt-2" hidden={this.isSubscribed(cottage) || !this.hasRole("ROLE_CLIENT")}>
+										   <button 
+											
+											 type="button"
+											 onClick={() => this.handleSubscribe(cottage)}
+											 className="btn btn-outline-primary btn-block"
+										   >
+											 Pretplati se
+										   </button>
+										 </div>
+										 <div className="mt-2" hidden={!this.isSubscribed(cottage) || !this.hasRole("ROLE_CLIENT")}>
+										   <button
+											
+											 
+											 type="button"
+											 onClick={() => this.handleUnsubscribe(cottage)}
+											 className="btn btn-outline-secondary btn-block"
+										   >
+											 Odjavi se
+										   </button>
+										 </div>
                                         </td>
 									</tr>
 								))}

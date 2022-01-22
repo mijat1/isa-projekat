@@ -24,4 +24,10 @@ public interface IUserService extends IService<UserDTO, UnspecifiedDTO<UserDTO>>
 
 	void changePassword(ChangePasswordDTO changePasswordDTO);
 
+	boolean unsubscribeFromUnit(UUID unitId);
+
+	boolean subscribeToUnit(UUID pharmacyId);
+
+	boolean isClientSubscribedToUnit(UUID unitId);
+
 }
